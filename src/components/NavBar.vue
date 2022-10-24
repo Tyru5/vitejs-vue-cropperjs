@@ -1,18 +1,18 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { ref } from 'vue';
 
-const navigation = [
-  { name: 'User Profile', href: '#', current: true },
-  { name: 'Bulb Settings', href: '#', current: false },
-  { name: 'Playlist', href: '#', current: false },
-  { name: 'WeVideo', href: '#', current: false },
-]
+const navigation = ref(
+  [
+    { name: 'User Profile', href: '#', current: false },
+    { name: 'Bulb Settings', href: '#', current: false },
+    { name: 'Playlist', href: '#', current: false },
+    { name: 'WeVideo', href: '#', current: true },
+  ],
+)
 function handleNavClicked(item) {
-  console.log('handle this...');
-  console.log(item.name);
-  console.log(navigation)
-  for (const page of navigation) {
+  for (const page of navigation.value) {
     if (page.name === item.name) page.current = true;
     else page.current = false;
   }
