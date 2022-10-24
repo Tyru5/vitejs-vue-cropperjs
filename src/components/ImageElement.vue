@@ -46,7 +46,7 @@ onMounted(() => {
   <h1>{{ msg }}</h1>
 
   <!-- Wrap the image or canvas element with a block element (container) -->
-  <div>
+  <div class="flex-center">
     <img id="image" :src="imageRef" />
   </div>
 
@@ -84,5 +84,10 @@ img:hover {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
 }
 </style>
