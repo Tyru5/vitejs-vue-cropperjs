@@ -8,6 +8,14 @@ import {
 
 /**
  * CtrlAltElite npm package.
+ * 
+ * Example usage:
+ * const ctrlAltElite = new CtrlAltElite('#my-element', {
+ *    uploadUrl: 'https://my-website.com/image/upload',
+ *    .
+ *    .
+ *    .
+ * })
  */
 class CtrlAltElite {
 
@@ -21,7 +29,7 @@ class CtrlAltElite {
   };
 
   /**
-   * the finalized plugin options object.
+   * the finalized package options object.
    */
    #finalPluginOptions;
 
