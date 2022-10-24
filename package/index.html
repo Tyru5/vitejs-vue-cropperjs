@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ctrl Alt Elite UI</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     .ctrl-alt-elite {
       font-family: sans-serif;
@@ -13,15 +14,52 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
       width: 100%;
       margin-bottom: 0;
       border: 2px dashed;
       border-color: #BDBDBD;
       aspect-ratio: 16/9;
+      max-height: 200px;
+      max-width: 200px;
+    }
+
+    .absolute-full-cover {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .flex-all-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hover-overlay {
+      background: rgba(0,0,0,0.6);
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    .hover-overlay * {
+      pointer-events: none;
     }
 
     .image-upload-label.no-image {
       cursor: pointer;
+    }
+
+    .image-upload-label.no-image:hover .hover-overlay {
+      opacity: 1;
+    }
+
+    .image-upload-label.no-image:hover .upload-label {
+      color: #FFF;
     }
 
     .hidden-file-upload-input {
@@ -33,6 +71,12 @@
 
     .upload-label {
       color: #757575;
+      font-weight: bolder;
+      transition: color 0.2s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   </style>
 </head>
@@ -42,6 +86,17 @@
       class="image-upload-label no-image"
       for="hidden-image-input"
     >
+      <div class="absolute-full-cover hover-overlay flex-all-center">
+        
+      </div>
+      <div class="upload-label-wrapper absolute-full-cover flex-all-center">
+        <div class="upload-label">
+          <span class="material-icons">image</span>
+          <span class="upload-label-text">
+            Upload an image.
+          </span>
+        </div>
+      </div>
       <input
         id="hidden-image-input"
         type="file"
@@ -50,11 +105,6 @@
         aria-label="Press enter to open the file browser where you can select an image to upload."
         accept="image/*"
       />
-      <div class="inner-area">
-        <span class="upload-label">
-          Upload image.
-        </span>
-      </div>
     </label>
   </div>
 </body>
