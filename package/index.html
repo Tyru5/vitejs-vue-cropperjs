@@ -17,10 +17,11 @@
       margin-bottom: 0;
       border: 2px dashed;
       border-color: #BDBDBD;
+      aspect-ratio: 16/9;
     }
 
     .image-upload-label.no-image {
-      border-color: #E0E0E0;
+      cursor: pointer;
     }
 
     .hidden-file-upload-input {
@@ -38,7 +39,7 @@
 <body>
   <div class="ctrl-alt-elite ctrl-alt-elite-initialized">
     <label
-      class="image-upload-label"
+      class="image-upload-label no-image"
       for="hidden-image-input"
     >
       <input
