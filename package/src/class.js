@@ -6,6 +6,10 @@ import {
   injectCss
 } from '../utilities/index.js';
 
+let Cropperjs = {
+  isScriptReady: false,
+};
+
 /**
  * CtrlAltElite npm package.
  * 
@@ -30,6 +34,10 @@ class CtrlAltElite {
     dragMode: 'crop',
     initialAspectRatio: 1,
     responsive: true,
+    autoCropArea: 0.5,
+    ready: () => {
+      console.log('CropperJS is ready!')
+    },
   };
 
   /**
@@ -67,6 +75,9 @@ class CtrlAltElite {
     this.#finalPluginOptions = _.merge(this.#defaultInitializationOptions, options || {});
   }
 
+  initialize() {
+    return new Cropper(this.element, this.#finalPluginOptions);
+  }
 
 }
 // ------------------------------------------

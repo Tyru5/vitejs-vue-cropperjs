@@ -1,6 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
+import CtrlAltElite from '../../package/src/class';
+
 const croppable = ref(false);
 const cropper = ref(null);
 
@@ -15,7 +17,7 @@ defineProps({
 
 function initializeCropperJS() {
   const image = document.getElementById('image');
-  cropper.value = new Cropper(image, {
+  cropper.value = new CtrlAltElite(image, {
     aspectRatio: 1,
     autoCropArea: 0.5,
     viewMode: 1,
