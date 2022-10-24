@@ -1,8 +1,8 @@
 {
-  "name": "ctrlaltelite",
+  "name": "ctrl-alt-elite",
   "version": "1.0.0",
-  "description": "Image Editor for upload processes",
-  "main": "index.js",
+  "description": "Image editor for upload processes.",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
