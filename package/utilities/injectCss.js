@@ -3,7 +3,7 @@
  * 
  * @param {String} src The URL of the css file to inject.
  */
- export function injectCssFile(src) {
+ export function injectCss(src) {
   const head = document.head || document.getElementsByTagName('head')[0];
   const link = document.createElement('link');
   link.rel = 'stylesheet';

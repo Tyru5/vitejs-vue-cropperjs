@@ -1,2 +1,2 @@
-export * from './injectCssFile.js';
+export * from './injectCss.js';
 export * from './loadScript.js';
