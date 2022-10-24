@@ -1,0 +1,26 @@
+{
+  "name": "ctrlaltelite",
+  "version": "1.0.0",
+  "description": "Image Editor for upload processes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tyru5/vitejs-vue-cropperjs.git"
+  },
+  "keywords": [
+    "Vue",
+    "npm",
+    "package",
+    "node",
+    "javascript"
+  ],
+  "author": "Tyrus Malmstrom Clayton Kinder Matthew Perroni Luc Dumas kathryn Sabranos Luke Chavez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tyru5/vitejs-vue-cropperjs/issues"
+  },
+  "homepage": "https://github.com/Tyru5/vitejs-vue-cropperjs#readme"
+}
