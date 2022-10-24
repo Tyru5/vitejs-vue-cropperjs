@@ -17,14 +17,18 @@ defineProps({
 
 function initializeCropperJS() {
   const image = document.getElementById('image');
-  cropper.value = new CtrlAltElite(image, {
+  const options = {
     aspectRatio: 1,
     autoCropArea: 0.5,
     viewMode: 1,
     ready: () => {
       croppable.value = true;
+      console.log('YEET!');
     },
-  });
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+  };
+  cropper.value = new CtrlAltElite(image, options);
 }
 
 function resetCropper() {
@@ -47,7 +51,7 @@ onMounted(() => {
 
   <!-- Wrap the image or canvas element with a block element (container) -->
   <div class="flex-center">
-    <img id="image" :src="imageRef" />
+    <img id="image"/>
   </div>
 
   <p class="croppable-alert">Has CropperJS initialized?: {{ croppable }}</p>

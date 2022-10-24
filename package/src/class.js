@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import _, { min } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import semver from 'semver'; // ?? maybe?
 
 import {
@@ -37,7 +38,7 @@ class CtrlAltElite {
     responsive: true,
     autoCropArea: 0.5,
     ready: () => {
-      console.log('CropperJS is ready!')
+      this.log('CropperJS is ready!')
     },
   };
 
@@ -46,13 +47,28 @@ class CtrlAltElite {
    */
    #finalPluginOptions;
 
+   #cropperJS = null;
+
   constructor(elementSelector, options = {}) {
     // TODO TAM: Check if the passed in elementSelector is a valid image type.
+    this.uuid = options.uuid || uuidv4();
+    this.debug = options.debug;
+    this.debugPrefix = options.debugPrefix || this.uuid;
     this.updateElement(elementSelector);
     this.updateOptions(options);
     this.injectRecommendedStyles();
     this.initializeElements();
-    this.initializeCropper();
+  }
+
+  /**
+    * A function that logs a color-coded message to the console if `debug` is `true`.
+    *
+    * @param {Object} args - A destructred array of all arguments passed into the `log` function which are then logged out in that same order.
+    *
+    */
+   log(...args) {
+    /* eslint no-console: "off" */
+    if (this.debug) console.log(`%c[${this.debugPrefix}]`, 'color: white; background: #2196F3', ...args);
   }
 
   // TODO implement: if the user passes in an element that cropperjs doesn't support, we have to 'convert' it to one
@@ -80,9 +96,13 @@ class CtrlAltElite {
 
   handleImageLoad() {
     const rect = this.imageUploadLabelElement.getBoundingClientRect();
-    console.log('rect', rect);
+    this.log('rect', rect);
     const modalDiv = document.createElement('div');
+    const modalImage = document.createElement('img');
+    modalImage.src = this.imageUrl;
+    modalImage.classList.add('ctrl-alt-elite-hidden-modal-image');
     modalDiv.classList.add('ctrl-alt-elite-modal-div');
+    modalImage.classList.add('ctrl-alt-elite-modal-image');
     modalDiv.style.position = 'absolute';
     modalDiv.style.top = `${rect.top}px`;
     modalDiv.style.bottom = `${rect.bottom}px`;
@@ -92,15 +112,18 @@ class CtrlAltElite {
     modalDiv.style.width = `${rect.width}px`;
     modalDiv.style.backgroundImage = `url('${this.imageUrl}')`;
     document.body.appendChild(modalDiv);
+    modalDiv.appendChild(modalImage);
     setTimeout(() => {
       modalDiv.classList.add('fullscreen');
+      modalImage.classList.add('fullscreen');
+      this.initializeCropperJS(modalImage);
     }, 3000);
   }
 
   handleImageInputElementChange(event) {
-    console.log('handleImageInputElementChange()', this);
+    this.log('handleImageInputElementChange()', this);
     this.imageUrl = URL.createObjectURL(event.target.files[0]);
-    console.log('this.imageUrl', this.imageUrl);
+    this.log('this.imageUrl', this.imageUrl);
     this.imageElement.addEventListener('load', this.handleImageLoad.bind(this));
     this.imageElement.src = this.imageUrl;
     this.imageUploadLabelElement.classList.remove('no-image');
@@ -165,8 +188,13 @@ class CtrlAltElite {
     this.rootElement = ctrlAltEliteElement;
   }
 
-  initializeCropper() {
-    return new Cropper(this.rootElement, this.#finalPluginOptions);
+  initializeCropperJS(imageElement) {
+    setTimeout( () => {
+      this.log('`initializeCropperJS()` imageElement: ', { imageElement });
+      this.#cropperJS = new Cropper(imageElement, this.#finalPluginOptions);
+      imageElement.classList.remove('ctrl-alt-elite-hidden-modal-image');
+      this.log('cropperjs instance created: ', this.#cropperJS);
+    }, 300);
   }
 
   injectRecommendedStyles() {
@@ -253,20 +281,31 @@ class CtrlAltElite {
         max-width: 100%;
       }
 
-      .ctrl-alt-elite-modal-div {
+      .ctrl-alt-elite-modal-div, .ctrl-alt-elite-modal-image {
         transition: all 0.3s ease-in-out;
         background-blend-mode: multiply;
         background-size: cover;
       }
 
-      .ctrl-alt-elite-modal-div.fullscreen {
+      .ctrl-alt-elite-modal-div.fullscreen, .ctrl-alt-elite-modal-image.fullscreen {
         top: 0px !important;
         right: 0px !important;
         bottom: 0px !important;
         left: 0px !important;
         height: 100vh !important;
         width: 100vw !important;
-        background-color: #000 !important;
+        /*background-color: #000 !important; */
+      }
+
+      .ctrl-alt-elite-modal-image.fullscreen {
+        display: block;
+        border-radius: 17px;
+        /* This rule is very important, please don't ignore this */
+        max-width: 100%;
+      }
+
+      .ctrl-alt-elite-hidden-modal-image {
+        display: none;
       }
     `;
 
