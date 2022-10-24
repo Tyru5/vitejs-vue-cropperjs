@@ -1,4 +1,4 @@
-import _, { min } from 'lodash';
+import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import semver from 'semver'; // ?? maybe?
 
@@ -94,7 +94,7 @@ class CtrlAltElite {
     this.#finalPluginOptions = _.merge(this.#defaultInitializationOptions, options || {});
   }
 
-  handleImageLoad() {
+  handleImageLoad(imageUrl) {
     const rect = this.imageUploadLabelElement.getBoundingClientRect();
     this.log('rect', rect);
     const modalDiv = document.createElement('div');
@@ -110,22 +110,35 @@ class CtrlAltElite {
     modalDiv.style.right = `${rect.right}px`;
     modalDiv.style.height = `${rect.height}px`;
     modalDiv.style.width = `${rect.width}px`;
-    modalDiv.style.backgroundImage = `url('${this.imageUrl}')`;
+    modalDiv.style.backgroundImage = `url('${imageUrl}')`;
     document.body.appendChild(modalDiv);
     modalDiv.appendChild(modalImage);
     setTimeout(() => {
-      modalDiv.classList.add('fullscreen');
-      modalImage.classList.add('fullscreen');
+      modalDiv.classList.add('expand-to-fullscreen');
+      modalImage.classList.add('expand-to-fullscreen');
       this.initializeCropperJS(modalImage);
-    }, 3000);
+    }, 500);
   }
 
-  handleImageInputElementChange(event) {
-    this.log('handleImageInputElementChange()', this);
+  loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.addEventListener('load', resolve);
+      image.addEventListener('error', reject);
+      image.src = src;
+    });
+  }
+
+  async handleImageInputElementChange(event) {
+    console.log('handleImageInputElementChange()', this);
+    this.uploadLabelElement.style.display = 'none';
+    this.uploadLabelLoadingIconElement.style.display = 'block';
     this.imageUrl = URL.createObjectURL(event.target.files[0]);
-    this.log('this.imageUrl', this.imageUrl);
-    this.imageElement.addEventListener('load', this.handleImageLoad.bind(this));
+    console.log('this.imageUrl', this.imageUrl);
+    await this.loadImage(this.imageUrl);
     this.imageElement.src = this.imageUrl;
+    this.handleImageLoad(this.imageUrl);
+    // this.imageElement.addEventListener('load', this.handleImageLoad.bind(this));
     this.imageUploadLabelElement.classList.remove('no-image');
     this.imageUploadLabelElement.classList.add('has-image');
   }
@@ -139,9 +152,10 @@ class CtrlAltElite {
     this.imageUploadLabelElement = document.createElement('label');
     const hoverOverlayElement = document.createElement('div');
     const uploadLabelWrapperElement = document.createElement('div');
-    const uploadLabelElement = document.createElement('div');
+    this.uploadLabelElement = document.createElement('div');
     const uploadLabelIconElement = document.createElement('span');
     const uploadLabelTextElement = document.createElement('span');
+    this.uploadLabelLoadingIconElement = document.createElement('span');
     const imageInputElement = document.createElement('input');
     this.imageElement = document.createElement('img');
 
@@ -154,10 +168,13 @@ class CtrlAltElite {
 
     uploadLabelWrapperElement.classList.add('upload-label-wrapper', 'absolute-full-cover', 'flex-all-center');
 
-    uploadLabelElement.classList.add('upload-label');
+    this.uploadLabelElement.classList.add('upload-label');
 
     uploadLabelIconElement.classList.add('upload-label-icon', 'material-icons');
     uploadLabelIconElement.textContent = 'image';
+
+    this.uploadLabelLoadingIconElement.classList.add('upload-label-loading-icon', 'material-icons', 'spin');
+    this.uploadLabelLoadingIconElement.textContent = 'incomplete_circle';
 
     uploadLabelTextElement.classList.add('upload-label-text');
     uploadLabelTextElement.textContent = 'Upload an image.';
@@ -172,10 +189,11 @@ class CtrlAltElite {
 
     this.imageElement.classList.add('ctrl-alt-elite-img');
 
-    uploadLabelElement.appendChild(uploadLabelIconElement);
-    uploadLabelElement.appendChild(uploadLabelTextElement);
+    this.uploadLabelElement.appendChild(uploadLabelIconElement);
+    this.uploadLabelElement.appendChild(uploadLabelTextElement);
 
-    uploadLabelWrapperElement.appendChild(uploadLabelElement);
+    uploadLabelWrapperElement.appendChild(this.uploadLabelElement);
+    uploadLabelWrapperElement.appendChild(this.uploadLabelLoadingIconElement);
 
     this.imageUploadLabelElement.appendChild(hoverOverlayElement);
     this.imageUploadLabelElement.appendChild(uploadLabelWrapperElement);
@@ -194,14 +212,39 @@ class CtrlAltElite {
       this.#cropperJS = new Cropper(imageElement, this.#finalPluginOptions);
       imageElement.classList.remove('ctrl-alt-elite-hidden-modal-image');
       this.log('cropperjs instance created: ', this.#cropperJS);
-    }, 300);
+    }, 500);
   }
 
   injectRecommendedStyles() {
     const css = `
+      @keyframes spin { 
+        100% { 
+          transform:rotate(360deg); 
+        } 
+      }
+
+      @keyframes expand-to-fullscreen { 
+        0% { 
+          background-color: #FFF; 
+        }
+        50% { 
+          background-color: #FFF; 
+        } 
+        100% { 
+          top: 0px;
+          right: 0px;
+          bottom: 0px;
+          left: 0px;
+          height: 100vh;
+          width: 100vw;
+          background-color: #000;
+        } 
+      }
+
       .ctrl-alt-elite {
         font-family: sans-serif;
       }
+
       .image-upload-label {
         display: flex;
         justify-content: center;
@@ -232,6 +275,10 @@ class CtrlAltElite {
         align-items: center;
       }
 
+      .spin {
+        animation: spin 2s linear;
+      }
+
       .hover-overlay {
         background: rgba(0,0,0,0.6);
         opacity: 0;
@@ -252,6 +299,10 @@ class CtrlAltElite {
 
       .image-upload-label.no-image:hover .upload-label {
         color: #FFF;
+      }
+
+      .upload-label-loading-icon {
+        display: none;
       }
 
       .hidden-file-upload-input {
@@ -287,17 +338,12 @@ class CtrlAltElite {
         background-size: cover;
       }
 
-      .ctrl-alt-elite-modal-div.fullscreen, .ctrl-alt-elite-modal-image.fullscreen {
-        top: 0px !important;
-        right: 0px !important;
-        bottom: 0px !important;
-        left: 0px !important;
-        height: 100vh !important;
-        width: 100vw !important;
-        /*background-color: #000 !important; */
+      .expand-to-fullscreen {
+        animation: 0.75s linear 1 expand-to-fullscreen;
+        animation-fill-mode: forwards;
       }
 
-      .ctrl-alt-elite-modal-image.fullscreen {
+      .ctrl-alt-elite-modal-image.expand-to-fullscreen {
         display: block;
         border-radius: 17px;
         /* This rule is very important, please don't ignore this */
