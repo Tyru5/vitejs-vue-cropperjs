@@ -49,7 +49,7 @@ class CtrlAltElite {
     // TODO TAM: Check if the passed in elementSelector is a valid image type.
     this.updateElement(elementSelector);
     this.updateOptions(options);
-    this.initialize();
+    return this.initialize();
   }
 
   // TODO implement: if the user passes in an element that cropperjs doesn't support, we have to 'convert' it to one
