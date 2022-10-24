@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/Tyru5/vitejs-vue-cropperjs#readme",
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "semver": "^7.3.8"
   }
 }
