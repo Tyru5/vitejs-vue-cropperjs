@@ -13,8 +13,11 @@ import ImageElement from './components/ImageElement.vue';
     <a href="https://vuejs.org/" target="_blank">
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
+    <a href="https://fengyuanchen.github.io/cropperjs/" target="_blank">
+      <img src="./assets/cropperjs2_logo.svg" class="logo cropperjs" alt="CropperJS logo" />
+    </a>
   </div>
-  <ImageElement msg="Vite + Vue + CropperJS" />
+  <ImageElement msg="Vite + Vue + CropperJS" image-ref="../src/assets/ty.jpg"/>
 </template>
 
 <style scoped>
@@ -28,5 +31,9 @@ import ImageElement from './components/ImageElement.vue';
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+.logo.cropperjs:hover {
+  filter: drop-shadow(0 0 2em #0293faaa);
 }
 </style>
