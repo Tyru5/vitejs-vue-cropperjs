@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ctrl Alt Elite UI</title>
+  <style>
+    .ctrl-alt-elite {
+      font-family: sans-serif;
+    }
+    .image-upload-label {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 0;
+      border: 2px dashed;
+      border-color: #BDBDBD;
+    }
+
+    .image-upload-label.no-image {
+      border-color: #E0E0E0;
+    }
+
+    .hidden-file-upload-input {
+      height: 0;
+      width: 0;
+      opacity: 0;
+      position: absolute;
+    }
+
+    .upload-label {
+      color: #757575;
+    }
+  </style>
+</head>
+<body>
+  <div class="ctrl-alt-elite ctrl-alt-elite-initialized">
+    <label
+      class="image-upload-label"
+      for="hidden-image-input"
+    >
+      <input
+        id="hidden-image-input"
+        type="file"
+        name="hidden-file-upload-input"
+        class="hidden-file-upload-input"
+        aria-label="Press enter to open the file browser where you can select an image to upload."
+        accept="image/*"
+      />
+      <div class="inner-area">
+        <span class="upload-label">
+          Upload image.
+        </span>
+      </div>
+    </label>
+  </div>
+</body>
+</html>

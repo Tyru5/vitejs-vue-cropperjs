@@ -3,6 +3,7 @@ class CtrlAltElite {
   constructor(elementSelector, options = {}) {
     this.updateElement(elementSelector);
     this.updateOptions(options);
+    this.initialize();
   }
 
   updateElement(elementSelector) {
