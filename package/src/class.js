@@ -19,9 +19,13 @@ import {
  */
 class CtrlAltElite {
 
-  // image types:
   #defaultInitializationOptions = {
     uploadUrl: 'https://my-website.com/image/upload', // TODO TAM: clean
+    allowedImageTypes: [
+      'jpg',
+      'png',
+      'svg'
+    ],
     viewMode: 1,
     dragMode: 'crop',
     initialAspectRatio: 1,
@@ -34,11 +38,14 @@ class CtrlAltElite {
    #finalPluginOptions;
 
   constructor(elementSelector, options = {}) {
+    // TODO TAM: Check if the passed in elementSelector is a valid image type.
     this.updateElement(elementSelector);
     this.updateOptions(options);
     this.initialize();
   }
 
+  // TODO implement: if the user passes in an element that cropperjs doesn't support, we have to 'convert' it to one
+  // that it does -- either an HTMLImageElement or HTMLCanvasElement.
   updateElement(elementSelector) {
     if (
       !_.isElement(elementSelector)
