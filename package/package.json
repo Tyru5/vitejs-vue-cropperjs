@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/Tyru5/vitejs-vue-cropperjs/issues"
   },
-  "homepage": "https://github.com/Tyru5/vitejs-vue-cropperjs#readme"
+  "homepage": "https://github.com/Tyru5/vitejs-vue-cropperjs#readme",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
