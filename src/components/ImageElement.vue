@@ -54,13 +54,6 @@ onMounted(() => {
     <img id="image"/>
   </div>
 
-  <p class="croppable-alert">Has CropperJS initialized?: {{ croppable }}</p>
-
-  <!-- Cropper actions container -->
-  <div class="cropper-actions-container">
-    <button class="action reset" @click="resetCropper()">Reset CropperJS</button>
-    <button class="action destroy" @click="destroyCropper()">Destroy CropperJS</button>
-  </div>
 </template>
 
 <style scoped lang="scss">
@@ -81,13 +74,6 @@ img {
 img:hover {
   transition: filter 300ms ease-out;
   filter: drop-shadow(0 0 1em #646cffaa);
-}
-
-/* actions container stying */
-.cropper-actions-container {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
 }
 
 .flex-center {
