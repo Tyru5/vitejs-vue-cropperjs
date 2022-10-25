@@ -48,8 +48,8 @@ export default {
 </script>
 
 <template>
-  <div class="grid h-screen place-items-center">
-    <div class="w-[600px] h-[800px] bg-slate-100 drop-shadow-lg">
+  <div class="grid h-fit place-items-center">
+    <div class="w-[600px] h-[800px] bg-slate-100 drop-shadow-lg mt-20">
       <div class="grid grid-rows-3 grid-cols-12 gap-y-10 gap-x-6 m-6">
         <div class="row-start-1 col-span-12 text-sky-500 text-4xl justify-self-start mt-6">User Settings</div>
         <div class="row-start-2 col-span-12 text-3xl text-gray-500 justify-self-start ml-6">Profile</div>
