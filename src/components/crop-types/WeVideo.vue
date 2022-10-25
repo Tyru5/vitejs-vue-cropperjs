@@ -1,6 +1,18 @@
 <script setup>
-import { PhotoIcon, VideoCameraIcon, FolderIcon, MusicalNoteIcon, LanguageIcon, HomeModernIcon, CloudArrowUpIcon, MicrophoneIcon, EyeIcon, AdjustmentsHorizontalIcon, FunnelIcon } from '@heroicons/vue/24/outline';
-import { onMounted, ref} from 'vue';
+import {
+  PhotoIcon,
+  VideoCameraIcon,
+  FolderIcon,
+  MusicalNoteIcon,
+  LanguageIcon,
+  HomeModernIcon,
+  CloudArrowUpIcon,
+  MicrophoneIcon,
+  EyeIcon,
+  AdjustmentsHorizontalIcon,
+  FunnelIcon,
+} from '@heroicons/vue/24/outline';
+import { onMounted, ref } from 'vue';
 import CtrlAltElite from '../../../package/src/class';
 
 const croppable = ref(false);
@@ -24,7 +36,7 @@ function initializeCropperJS() {
       ready: () => {
         croppable.value = true;
       },
-    }
+    },
   };
   new CtrlAltElite(element, options);
 }
@@ -36,7 +48,7 @@ onMounted(() => {
 
 <template>
   <div class="grid h-fit place-items-center">
-    <div class="w-[800px] h-[600px] bg-zinc-600 drop-shadow-lg flex flex-col gap-6 mb-5 mt-20">
+    <div class="w-[800px] h-[600px] bg-zinc-600 drop-shadow-lg flex flex-col gap-6 mb-5 mt-20 rounded-3xl">
       <div class="grid grid-rows-3 grid-flow-col gap-4 mt-5">
         <div class="row-span-3">
           <ul class="list-none pt-5">

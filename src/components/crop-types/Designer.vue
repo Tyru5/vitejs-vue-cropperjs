@@ -52,7 +52,7 @@ export default {
 
 <template>
   <div class="grid h-fit place-items-center">
-    <div class="w-[600px] h-[700px] bg-slate-100 drop-shadow-lg flex flex-col gap-6 mt-20">
+    <div class="w-[600px] h-[700px] bg-slate-100 drop-shadow-lg flex flex-col gap-6 mt-20 rounded-3xl">
         <div class="flex justify-center items-center p-6 bg-white shadow-black-500/50 border-b-4">
             <div class="rounded-full w-7 h-7 bg-gray-300 text-center"><span class="inline-block mx-1 mt-1 font-bold text-white">1</span></div>
             <hr class="my-4 mx-auto w-48 h-px bg-gray-300 rounded border-0 md:my-10 dark:bg-gray-700">

@@ -1,5 +1,5 @@
 <script setup>
-import { VideoCameraIcon } from '@heroicons/vue/24/outline'
+import { VideoCameraIcon } from '@heroicons/vue/24/outline';
 import { onMounted, ref } from 'vue';
 import CtrlAltElite from '../../../package/src/class';
 
@@ -24,7 +24,7 @@ function initializeCropperJS() {
       ready: () => {
         croppable.value = true;
       },
-    }
+    },
   };
   new CtrlAltElite(element, options);
 }
@@ -36,9 +36,9 @@ onMounted(() => {
 
 <template>
   <div class="grid h-fit place-items-center">
-    <div class="w-[900px] h-[450px] bg-slate-100 drop-shadow-lg flex flex-col gap-6 mb-5 mt-20">
+    <div class="w-[900px] h-[450px] bg-slate-100 drop-shadow-lg flex flex-col gap-6 mb-5 mt-20 rounded-3xl">
       <div class="flex justify-between p-6 bg-sky-400 mb-5">
-        <div class="self-start text-white font-bold text-xl	">X</div>
+        <div class="self-start text-white font-bold text-xl">X</div>
         <p class="self-center text-white font-semibold">Update settings for Intro to Vue 3's composition API</p>
         <VideoCameraIcon class="w-6 h-6 text-white" />
       </div>
@@ -49,17 +49,23 @@ onMounted(() => {
         <div class="col-span-2">
           <h1 class="px-6 text-md text-slate-600 text-left">Bulb Name</h1>
           <div class="px-6 flex pb-5">
-            <input type="text" id="email"
+            <input
+              type="text"
+              id="email"
               class="bg-transparent border-b-2 border-gray-300 text-gray-900 p-2.5 focus:outline-none grow"
-              placeholder="Intro to Vue 3's composition API">
+              placeholder="Intro to Vue 3's composition API"
+            />
           </div>
         </div>
         <div class="row-span-2 col-span-2">
           <h1 class="self-start px-6 text-md text-slate-600 text-left">Learning Objective</h1>
           <div class="px-6 flex items-center">
-            <input type="text" id="email"
+            <input
+              type="text"
+              id="email"
               class="bg-transparent border-b-2 border-gray-300 text-gray-900 p-2.5 focus:outline-none grow"
-              placeholder="Build your first Vue 3 application">
+              placeholder="Build your first Vue 3 application"
+            />
           </div>
         </div>
       </div>
@@ -67,5 +73,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
