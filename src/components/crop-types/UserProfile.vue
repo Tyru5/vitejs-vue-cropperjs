@@ -16,7 +16,7 @@ export default {
     <div class="w-[600px] h-[700px] bg-slate-100 drop-shadow-lg">
       <div class="grid grid-rows-3 grid-cols-12 gap-y-10 gap-x-6 m-6">
         <div class="row-start-1 col-span-12 text-sky-500 text-4xl justify-self-start mt-6">User Settings</div>
-        <div class="row-start-2 col-span-12 text-3xl justify-self-start ml-6">Profile</div>
+        <div class="row-start-2 col-span-12 text-3xl text-gray-500 justify-self-start ml-6">Profile</div>
         <div class="row-start-3 col-start-1 col-end-2"><EnvelopeIcon class="w-10 h-10 text-slate-400"/></div>
         <div class="row-start-3 col-span-11">
           <input type="text" id="email" class="bg-transparent border-dotted border-b-2 border-gray-300 text-gray-900 block w-full p-2.5 focus:outline-none" placeholder="Email">
