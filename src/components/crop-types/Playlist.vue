@@ -49,8 +49,8 @@ export default {
 </script>
 
 <template>
-  <div class="grid h-screen place-items-center">
-    <div class="w-[600px] h-[900px] bg-slate-100 drop-shadow-lg flex flex-col gap-6">
+  <div class="grid h-fit place-items-center">
+    <div class="w-[600px] h-[900px] bg-slate-100 drop-shadow-lg flex flex-col gap-6 mt-20">
         <div class="flex justify-between p-6 bg-sky-400">
             <div class="self-start text-white font-bold text-xl	">X</div>
             <p class="self-center text-white font-semibold">Add resource to New Module 1</p>

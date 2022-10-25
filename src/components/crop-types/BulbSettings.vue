@@ -35,8 +35,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="grid h-screen place-items-center">
-    <div class="w-[900px] h-[450px] bg-slate-100 drop-shadow-lg flex flex-col gap-6 mb-5">
+  <div class="grid h-fit place-items-center">
+    <div class="w-[900px] h-[450px] bg-slate-100 drop-shadow-lg flex flex-col gap-6 mb-5 mt-20">
       <div class="flex justify-between p-6 bg-sky-400 mb-5">
         <div class="self-start text-white font-bold text-xl	">X</div>
         <p class="self-center text-white font-semibold">Update settings for Intro to Vue 3's composition API</p>

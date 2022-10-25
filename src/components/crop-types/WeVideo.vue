@@ -35,8 +35,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="grid h-screen place-items-center">
-    <div class="w-[800px] h-[600px] bg-zinc-600 drop-shadow-lg flex flex-col gap-6 mb-5">
+  <div class="grid h-fit place-items-center">
+    <div class="w-[800px] h-[600px] bg-zinc-600 drop-shadow-lg flex flex-col gap-6 mb-5 mt-20">
       <div class="grid grid-rows-3 grid-flow-col gap-4 mt-5">
         <div class="row-span-3">
           <ul class="list-none pt-5">
