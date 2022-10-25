@@ -4,7 +4,6 @@ import { onMounted, ref, onUpdated} from 'vue';
 import CtrlAltElite from '../../../package/src/class';
 
 const croppable = ref(false);
-const cropper = ref(null);
 
 // Defined props:
 defineProps({
@@ -14,17 +13,21 @@ defineProps({
 function initializeCropperJS() {
   const image = document.getElementById('image');
   const options = {
-    aspectRatio: 1,
-    autoCropArea: 0.5,
-    viewMode: 1,
-    ready: () => {
-      croppable.value = true;
-      console.log('YEET!');
-    },
     debug: true,
     debugPrefix: 'CtrlAltElite',
+    cropView: 'avatar',
+    elementId: 'unique',
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+        console.log('YEET!');
+      },
+    }
   };
-  cropper.value = new CtrlAltElite(image, options);
+  new CtrlAltElite(image, options);
 }
 
 onMounted(() => {
