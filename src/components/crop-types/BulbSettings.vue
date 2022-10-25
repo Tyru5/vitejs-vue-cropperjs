@@ -7,7 +7,7 @@ import { Bars3BottomLeftIcon, LinkIcon, PaperClipIcon, VideoCameraIcon } from '@
     <div class="w-[900px] h-[450px] bg-slate-100 drop-shadow-lg flex flex-col gap-6 mb-5">
       <div class="flex justify-between p-6 bg-sky-400 mb-5">
         <div class="self-start text-white font-bold text-xl	">X</div>
-        <p class="self-center text-white font-semibold">Update settings for bulb</p>
+        <p class="self-center text-white font-semibold">Update settings for Intro to Vue 3's composition API</p>
         <VideoCameraIcon class="w-6 h-6 text-white" />
       </div>
       <div class="grid grid-rows-3 grid-flow-col gap-4">
