@@ -1,8 +1,8 @@
 {
-  "name": "ctrlaltelite",
+  "name": "ctrl-alt-elite",
   "version": "1.0.0",
-  "description": "Image Editor for upload processes",
-  "main": "index.js",
+  "description": "Image editor for upload processes.",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/Tyru5/vitejs-vue-cropperjs/issues"
   },
-  "homepage": "https://github.com/Tyru5/vitejs-vue-cropperjs#readme"
+  "homepage": "https://github.com/Tyru5/vitejs-vue-cropperjs#readme",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "semver": "^7.3.8"
+  }
 }

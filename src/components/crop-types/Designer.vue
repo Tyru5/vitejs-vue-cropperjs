@@ -1,3 +1,38 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+import CtrlAltElite from '../../../package/src/class';
+
+const croppable = ref(false);
+
+function initializeCropperJS() {
+  const element = document.querySelector('#upload-image-button-wrapper > svg');
+  const options = {
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+    cropView: 'portrait',
+    elementId: 'unique',
+    replaceExistingElement: false,
+    onSuccess(cropperJs) {
+      const targetElement = document.getElementById('target');
+      targetElement.style.backgroundImage = `url('${cropperJs.url}')`;
+    },
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+      },
+    }
+  };
+  new CtrlAltElite(element, options);
+}
+
+onMounted(() => {
+  if (!document.querySelector('.ctrl-alt-elite')) initializeCropperJS();
+});
+</script>
+
 <script>
 import { VideoCameraIcon, MicrophoneIcon, PaperClipIcon, PhotoIcon, Cog6ToothIcon, FaceSmileIcon, EllipsisVerticalIcon, ChevronUpDownIcon} from '@heroicons/vue/24/solid'
 
@@ -33,7 +68,7 @@ export default {
             <button class="hover:border-gray-200 focus:outline-none"><VideoCameraIcon class="w-5 h-5 text-black"/></button>
             <button class="hover:border-gray-200 focus:outline-none"><MicrophoneIcon class="w-5 h-5 text-black"/></button>
             <button class="hover:border-gray-200 focus:outline-none"><PaperClipIcon class="w-5 h-5 text-black"/></button>
-            <button class="hover:border-gray-200 focus:outline-none"><PhotoIcon class="w-5 h-5 text-black"/></button>
+            <button id="upload-image-button-wrapper" class="hover:border-gray-200 focus:outline-none"><PhotoIcon class="w-5 h-5 text-black"/></button>
             <button class="hover:border-gray-200 focus:outline-none"><FaceSmileIcon class="w-5 h-5 text-black"/></button>
         </div>
         <div class="flex self-center">
@@ -46,14 +81,17 @@ export default {
             <button type="button" class="inline-block w-30 px-6 py-2.5 bg-sky-300 text-white font-medium text-xs leading-tight uppercase  shadow-md hover:shadow-lg hover:border-slate-400 focus:slate-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-zinc-600 active:shadow-lg transition duration-150 ease-in-out font-semibold tracking-widest mr-6 rounded-none	">DONE</button>
             <button type="button" class="inline-block w-30 px-6 py-2.5 bg-transparent border-2 border-sky-300 text-sky-400  font-medium text-xs leading-tight uppercase  shadow-md  focus:slate-500 focus:shadow-lg focus:outline-none active:bg-zinc-600 rounded-none	active:shadow-lg transition duration-150 ease-in-out font-extrabold tracking-widest mr-6">CUSTOMIZE</button>
         </div>
-        
- 
-
+        <div id="target"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
-
+#target {
+  width: 100%;
+  height: 200px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 </style>

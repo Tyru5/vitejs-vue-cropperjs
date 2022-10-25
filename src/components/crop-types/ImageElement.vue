@@ -1,59 +1,47 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
+import CtrlAltElite from '../../../package/src/class';
+
 const croppable = ref(false);
-const cropper = ref(null);
 
 // Defined props:
 defineProps({
   msg: String,
-  imageRef: {
-    type: String,
-    required: true,
-  },
 });
 
 function initializeCropperJS() {
-  const image = document.getElementById('image');
-  cropper.value = new Cropper(image, {
-    aspectRatio: 1,
-    autoCropArea: 0.5,
-    viewMode: 1,
-    ready: () => {
-      croppable.value = true;
-    },
-  });
-}
-
-function resetCropper() {
-  cropper.value.reset();
-}
-
-function destroyCropper() {
-  cropper.value.destroy();
+  const image = document.getElementById('target');
+  const options = {
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+    cropView: 'avatar',
+    elementId: 'unique',
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+        console.log('YEET!');
+      },
+    }
+  };
+  new CtrlAltElite(image, options);
 }
 
 onMounted(() => {
-  window.addEventListener('DOMContentLoaded', () => {
-    initializeCropperJS();
-  });
+  if (!document.querySelector('.ctrl-alt-elite')) initializeCropperJS();
 });
+
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 class="font-mono m-20 text-2xl">{{ msg }}</h1>
 
   <!-- Wrap the image or canvas element with a block element (container) -->
-  <div>
-    <img id="image" :src="imageRef" />
-  </div>
-
-  <p class="croppable-alert">Has CropperJS initialized?: {{ croppable }}</p>
-
-  <!-- Cropper actions container -->
-  <div class="cropper-actions-container">
-    <button class="action reset" @click="resetCropper()">Reset CropperJS</button>
-    <button class="action destroy" @click="destroyCropper()">Destroy CropperJS</button>
+  <div class="flex-center">
+    <img id="target" />
   </div>
 </template>
 
@@ -77,10 +65,8 @@ img:hover {
   filter: drop-shadow(0 0 1em #646cffaa);
 }
 
-/* actions container stying */
-.cropper-actions-container {
+.flex-center {
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+  justify-content: center;
 }
 </style>
