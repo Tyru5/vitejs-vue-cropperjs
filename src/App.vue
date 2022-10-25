@@ -21,7 +21,7 @@ const navOptions = ref(
 <template>
   <NavBar :navScreens="navOptions"></NavBar>
   <BulbSettings v-if="store.state.activeNav === 'bulbSettings'"></BulbSettings>
-  <ImageElement v-else msg="Vite + Vue + CropperJS" image-ref="../src/assets/ty.jpg" />
+  <ImageElement v-else msg="CropperJS test" />
 </template>
 
 <style scoped>

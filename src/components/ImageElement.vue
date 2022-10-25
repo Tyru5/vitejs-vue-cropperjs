@@ -9,10 +9,6 @@ const cropper = ref(null);
 // Defined props:
 defineProps({
   msg: String,
-  imageRef: {
-    type: String,
-    required: true,
-  },
 });
 
 function initializeCropperJS() {
@@ -31,14 +27,6 @@ function initializeCropperJS() {
   cropper.value = new CtrlAltElite(image, options);
 }
 
-function resetCropper() {
-  cropper.value.reset();
-}
-
-function destroyCropper() {
-  cropper.value.destroy();
-}
-
 onMounted(() => {
   window.addEventListener('DOMContentLoaded', () => {
     initializeCropperJS();
@@ -47,13 +35,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 class="font-mono m-20 text-2xl">{{ msg }}</h1>
 
   <!-- Wrap the image or canvas element with a block element (container) -->
   <div class="flex-center">
-    <img id="image"/>
+    <img id="image" />
   </div>
-
 </template>
 
 <style scoped lang="scss">
