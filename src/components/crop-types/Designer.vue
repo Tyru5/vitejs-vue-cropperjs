@@ -12,6 +12,10 @@ function initializeCropperJS() {
     cropView: 'portrait',
     elementId: 'unique',
     replaceExistingElement: false,
+    onSuccess(cropperJs) {
+      const targetElement = document.getElementById('target');
+      targetElement.style.backgroundImage = `url('${cropperJs.url}')`;
+    },
     cropperjs: {
       aspectRatio: 1,
       autoCropArea: 0.5,
@@ -25,7 +29,7 @@ function initializeCropperJS() {
 }
 
 onMounted(() => {
-    if (!document.querySelector('.ctrl-alt-elite')) initializeCropperJS();
+  if (!document.querySelector('.ctrl-alt-elite')) initializeCropperJS();
 });
 </script>
 
@@ -77,14 +81,17 @@ export default {
             <button type="button" class="inline-block w-30 px-6 py-2.5 bg-sky-300 text-white font-medium text-xs leading-tight uppercase  shadow-md hover:shadow-lg hover:border-slate-400 focus:slate-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-zinc-600 active:shadow-lg transition duration-150 ease-in-out font-semibold tracking-widest mr-6 rounded-none	">DONE</button>
             <button type="button" class="inline-block w-30 px-6 py-2.5 bg-transparent border-2 border-sky-300 text-sky-400  font-medium text-xs leading-tight uppercase  shadow-md  focus:slate-500 focus:shadow-lg focus:outline-none active:bg-zinc-600 rounded-none	active:shadow-lg transition duration-150 ease-in-out font-extrabold tracking-widest mr-6">CUSTOMIZE</button>
         </div>
-        
- 
-
+        <div id="target"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
-
+#target {
+  width: 100%;
+  height: 200px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 </style>

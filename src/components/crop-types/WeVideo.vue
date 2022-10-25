@@ -1,14 +1,9 @@
 <script setup>
 import { PhotoIcon, VideoCameraIcon, FolderIcon, MusicalNoteIcon, LanguageIcon, HomeModernIcon, CloudArrowUpIcon, MicrophoneIcon, EyeIcon, AdjustmentsHorizontalIcon, FunnelIcon } from '@heroicons/vue/24/outline';
-import { onMounted, ref, onUpdated} from 'vue';
+import { onMounted, ref} from 'vue';
 import CtrlAltElite from '../../../package/src/class';
 
 const croppable = ref(false);
-
-// Defined props:
-defineProps({
-  msg: String,
-});
 
 function initializeCropperJS() {
   const element = document.getElementById('upload-image-button');
@@ -18,6 +13,10 @@ function initializeCropperJS() {
     cropView: 'portrait',
     elementId: 'unique',
     replaceExistingElement: false,
+    onSuccess(cropperJs) {
+      const targetElement = document.getElementById('target');
+      targetElement.style.backgroundImage = `url('${cropperJs.url}')`;
+    },
     cropperjs: {
       aspectRatio: 1,
       autoCropArea: 0.5,
@@ -107,6 +106,7 @@ onMounted(() => {
           <div class="px-6 flex items-center">
             <FolderIcon class="w-20 h-20 text-slate-400 mr-3" />
             <img src="../../assets/WeVideoDemoShot.png" class="p-1 rounded max-w-sm" alt="WeVideo Demo picture" />
+            <div id="target"></div>
           </div>
         </div>
       </div>
@@ -115,4 +115,11 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+#target {
+  width: 168px;
+  height: 109px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 </style>

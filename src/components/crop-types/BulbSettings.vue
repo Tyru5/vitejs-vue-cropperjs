@@ -1,6 +1,6 @@
 <script setup>
 import { VideoCameraIcon } from '@heroicons/vue/24/outline'
-import { onMounted, ref, onUpdated} from 'vue';
+import { onMounted, ref } from 'vue';
 import CtrlAltElite from '../../../package/src/class';
 
 const croppable = ref(false);

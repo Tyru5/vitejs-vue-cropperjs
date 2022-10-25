@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, onUpdated} from 'vue';
+import { onMounted, ref } from 'vue';
 
 import CtrlAltElite from '../../../package/src/class';
 

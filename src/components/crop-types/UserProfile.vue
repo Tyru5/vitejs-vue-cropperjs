@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, onUpdated} from 'vue';
+import { onMounted, ref } from 'vue';
 import CtrlAltElite from '../../../package/src/class';
 
 const croppable = ref(false);
@@ -12,6 +12,10 @@ function initializeCropperJS() {
     cropView: 'portrait',
     elementId: 'unique',
     replaceExistingElement: false,
+    onSuccess(cropperJs) {
+      const targetElement = document.getElementById('target');
+      targetElement.style.backgroundImage = `url('${cropperJs.url}')`;
+    },
     cropperjs: {
       aspectRatio: 1,
       autoCropArea: 0.5,
@@ -21,7 +25,7 @@ function initializeCropperJS() {
       },
     }
   };
-  console.log('element', element);
+
   new CtrlAltElite(element, options);
 }
 
@@ -45,7 +49,7 @@ export default {
 
 <template>
   <div class="grid h-screen place-items-center">
-    <div class="w-[600px] h-[700px] bg-slate-100 drop-shadow-lg">
+    <div class="w-[600px] h-[800px] bg-slate-100 drop-shadow-lg">
       <div class="grid grid-rows-3 grid-cols-12 gap-y-10 gap-x-6 m-6">
         <div class="row-start-1 col-span-12 text-sky-500 text-4xl justify-self-start mt-6">User Settings</div>
         <div class="row-start-2 col-span-12 text-3xl text-gray-500 justify-self-start ml-6">Profile</div>
@@ -66,11 +70,17 @@ export default {
           <input type="text" id="email" class="bg-transparent border-b-2 border-gray-300 text-gray-900 block w-full p-2.5 focus:outline-none" placeholder="Display Name (ex. Sgt. Pepper)">
         </div>
       </div>
+      <div id="target"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
-
+#target {
+  width: 100%;
+  height: 200px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 </style>

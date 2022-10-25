@@ -39,6 +39,9 @@ class CtrlAltElite {
       'portrait',
       'avatar',
     ],
+    onSuccess: () => {
+
+    },
     cropperjs: {
       viewMode: 1,
       dragMode: 'crop',
@@ -67,7 +70,6 @@ class CtrlAltElite {
       imageAlt: 'Custom image to crop and edit',
       didOpen: () => {
         this.log('initializing cropperjs...');
-        this.toggleUploadLabel();
         this.initializeCropperJS();
       }
     }
@@ -156,8 +158,15 @@ class CtrlAltElite {
     isDenied,
     isDismissed,
   } = {}) {
-    if (isConfirmed) this.imageElement.src = this.#cropperJS.url;
     this.imageInputElement.value = '';
+    console.log('isConfirmed', isConfirmed);
+    if (isConfirmed) {
+      if (this.imageElement) this.imageElement.src = this.#cropperJS.url;
+      console.log('_.isFunction(this.onSuccess)', _.isFunction(this.onSuccess));
+      if (_.isFunction(this.#finalPluginOptions.onSuccess)) {
+        this.#finalPluginOptions.onSuccess(this.#cropperJS);
+      }
+    }
   }
 
   /**
