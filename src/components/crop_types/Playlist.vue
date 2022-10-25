@@ -2,7 +2,7 @@
 import { ChatBubbleBottomCenterIcon, Bars3BottomLeftIcon, LinkIcon, PaperClipIcon, DocumentIcon} from '@heroicons/vue/24/outline'
 
 export default {
-  name: 'UserProfile',
+  name: 'Playlist',
   components: {
     DocumentIcon,
     PaperClipIcon,
