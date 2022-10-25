@@ -1,3 +1,34 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+import CtrlAltElite from '../../../package/src/class';
+
+const croppable = ref(false);
+
+function initializeCropperJS() {
+  const element = document.querySelector('#upload-image-button-wrapper > svg');
+  const options = {
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+    cropView: 'portrait',
+    elementId: 'unique',
+    replaceExistingElement: false,
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+      },
+    }
+  };
+  new CtrlAltElite(element, options);
+}
+
+onMounted(() => {
+  initializeCropperJS();
+});
+</script>
+
 <script>
 import { VideoCameraIcon, MicrophoneIcon, PaperClipIcon, PhotoIcon, Cog6ToothIcon, FaceSmileIcon, EllipsisVerticalIcon, ChevronUpDownIcon} from '@heroicons/vue/24/solid'
 
@@ -33,7 +64,7 @@ export default {
             <button class="hover:border-gray-200 focus:outline-none"><VideoCameraIcon class="w-5 h-5 text-black"/></button>
             <button class="hover:border-gray-200 focus:outline-none"><MicrophoneIcon class="w-5 h-5 text-black"/></button>
             <button class="hover:border-gray-200 focus:outline-none"><PaperClipIcon class="w-5 h-5 text-black"/></button>
-            <button class="hover:border-gray-200 focus:outline-none"><PhotoIcon class="w-5 h-5 text-black"/></button>
+            <button id="upload-image-button-wrapper" class="hover:border-gray-200 focus:outline-none"><PhotoIcon class="w-5 h-5 text-black"/></button>
             <button class="hover:border-gray-200 focus:outline-none"><FaceSmileIcon class="w-5 h-5 text-black"/></button>
         </div>
         <div class="flex self-center">

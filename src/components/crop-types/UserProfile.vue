@@ -1,3 +1,36 @@
+<script setup>
+import { onMounted, ref, onUpdated} from 'vue';
+import CtrlAltElite from '../../../package/src/class';
+
+const croppable = ref(false);
+
+function initializeCropperJS() {
+  const element = document.querySelector('#upload-image-button-wrapper > svg');
+  const options = {
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+    cropView: 'portrait',
+    elementId: 'unique',
+    replaceExistingElement: false,
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+      },
+    }
+  };
+  console.log('element', element);
+  new CtrlAltElite(element, options);
+}
+
+onMounted(() => {
+  console.log('Mounted!');
+  initializeCropperJS();
+});
+</script>
+
 <script>
 import { UserCircleIcon, EnvelopeIcon, FaceSmileIcon} from '@heroicons/vue/24/solid'
 
@@ -29,7 +62,7 @@ export default {
         <div class="row-start-4 row-span-1 col-span-5 ">
           <input type="text" id="first_name" class="bg-transparent border-b-2 border-gray-300 text-gray-900 block w-full p-2.5 focus:outline-none" placeholder="Last name">
         </div>
-        <div class="row-start-5 col-start-1 col-end-3"><FaceSmileIcon class="w-14 h-14 text-slate-400"/></div>
+        <div id="upload-image-button-wrapper" class="row-start-5 col-start-1 col-end-3"><FaceSmileIcon class="w-14 h-14 text-slate-400"/></div>
         <div class="row-start-5 col-span-10 row-start-3 ">
           <input type="text" id="email" class="bg-transparent border-b-2 border-gray-300 text-gray-900 block w-full p-2.5 focus:outline-none" placeholder="Display Name (ex. Sgt. Pepper)">
         </div>

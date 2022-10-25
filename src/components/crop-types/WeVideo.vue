@@ -1,5 +1,38 @@
 <script setup>
-import { PhotoIcon, VideoCameraIcon, FolderIcon, MusicalNoteIcon, LanguageIcon, HomeModernIcon, CloudArrowUpIcon, MicrophoneIcon, EyeIcon, AdjustmentsHorizontalIcon, FunnelIcon } from '@heroicons/vue/24/outline'
+import { PhotoIcon, VideoCameraIcon, FolderIcon, MusicalNoteIcon, LanguageIcon, HomeModernIcon, CloudArrowUpIcon, MicrophoneIcon, EyeIcon, AdjustmentsHorizontalIcon, FunnelIcon } from '@heroicons/vue/24/outline';
+import { onMounted, ref, onUpdated} from 'vue';
+import CtrlAltElite from '../../../package/src/class';
+
+const croppable = ref(false);
+
+// Defined props:
+defineProps({
+  msg: String,
+});
+
+function initializeCropperJS() {
+  const element = document.getElementById('upload-image-button');
+  const options = {
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+    cropView: 'portrait',
+    elementId: 'unique',
+    replaceExistingElement: false,
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+      },
+    }
+  };
+  new CtrlAltElite(element, options);
+}
+
+onMounted(() => {
+  initializeCropperJS();
+});
 </script>
 
 <template>
@@ -48,7 +81,7 @@ import { PhotoIcon, VideoCameraIcon, FolderIcon, MusicalNoteIcon, LanguageIcon, 
         </div>
         <div class="col-span-2 pt-5">
           <div class="px-6 flex pb-5 justify-end">
-            <button>
+            <button id="upload-image-button">
               <div class="px-6 flex items-center text-sky-500">
                 <CloudArrowUpIcon class="w-6 h-6 text-sky-500" />
                 <p class="pl-3">Import</p>

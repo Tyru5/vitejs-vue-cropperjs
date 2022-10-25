@@ -1,5 +1,37 @@
 <script setup>
 import { VideoCameraIcon } from '@heroicons/vue/24/outline'
+import { onMounted, ref, onUpdated} from 'vue';
+import CtrlAltElite from '../../../package/src/class';
+
+const croppable = ref(false);
+
+// Defined props:
+defineProps({
+  msg: String,
+});
+
+function initializeCropperJS() {
+  const element = document.getElementById('image');
+  const options = {
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+    cropView: 'landscape',
+    elementId: 'unique',
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+      },
+    }
+  };
+  new CtrlAltElite(element, options);
+}
+
+onMounted(() => {
+  initializeCropperJS();
+});
 </script>
 
 <template>
@@ -11,7 +43,7 @@ import { VideoCameraIcon } from '@heroicons/vue/24/outline'
         <VideoCameraIcon class="w-6 h-6 text-white" />
       </div>
       <div class="grid grid-rows-3 grid-flow-col gap-4">
-        <div class="row-span-3">
+        <div class="row-span-3 grid content-center">
           <image id="image" />
         </div>
         <div class="col-span-2">
