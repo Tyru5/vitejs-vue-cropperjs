@@ -15,12 +15,12 @@ const store = useStore();
 
 const navOptions = ref(
   [
-    { name: 'User Profile', nav: 'userProfile', href: '#', current: false },
+    { name: 'User Profile', nav: 'userProfile', href: '#', current: true },
     { name: 'Bulb Settings', nav: 'bulbSettings', href: '#', current: false },
     { name: 'Playlist', nav: 'playlist', href: '#', current: false },
     { name: 'WeVideo', nav: 'weVideo', href: '#', current: false },
     { name: 'Designer', nav: 'designer', href: '#', current: false },
-    { name: 'Image', nav: 'image', href: '#', current: true },
+    { name: 'Image', nav: 'image', href: '#', current: false },
   ],
 )
 </script>
