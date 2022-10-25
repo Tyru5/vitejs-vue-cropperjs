@@ -247,6 +247,7 @@ class CtrlAltElite {
     this.imageElement = document.createElement('img');
 
     ctrlAltEliteElement.classList.add('ctrl-alt-delete');
+    if (this.#finalPluginOptions.cropView === 'avatar') ctrlAltEliteElement.classList.add('ctrl-alt-elite-avatar');
 
     this.imageUploadLabelElement.classList.add('image-upload-label', 'no-image');
     this.imageUploadLabelElement.htmlFor = this.#finalPluginOptions.elementId;
@@ -347,6 +348,12 @@ class CtrlAltElite {
         aspect-ratio: 16/9;
         height: 113px;
         width: 200px;
+      }
+
+      .ctrl-alt-elite-avatar .image-upload-label {
+        aspect-ratio: unset;
+        height: 125px;
+        width: 125px;
       }
 
       .absolute-full-cover {

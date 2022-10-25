@@ -19,6 +19,7 @@ const navOptions = ref(
     { name: 'Playlist', nav: 'playlist', href: '#', current: false },
     { name: 'WeVideo', nav: 'weVideo', href: '#', current: false },
     { name: 'Designer', nav: 'designer', href: '#', current: false },
+    { name: 'Image', nav: 'image', href: '#', current: false },
   ],
 )
 </script>
