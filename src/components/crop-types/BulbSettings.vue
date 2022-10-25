@@ -1,5 +1,5 @@
 <script setup>
-import { Bars3BottomLeftIcon, LinkIcon, PaperClipIcon, VideoCameraIcon } from '@heroicons/vue/24/outline'
+import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 </script>
 
 <template>

@@ -21,12 +21,12 @@ export default {
             <p class="self-center text-white font-semibold">Add resource to New Module 1</p>
             <DocumentIcon class="w-6 h-6 text-white"/>
         </div>
-        <h1 class="self-start px-6 text-2xl font-light">Add Attachment</h1>
+        <h1 class="self-start px-6 text-2xl font-light text-gray-500">Add Attachment</h1>
         <div class="px-6 flex items-center">
             <PaperClipIcon class="w-6 h-6 text-slate-400"/>
             <input type="text" id="email" class="bg-transparent border-b-2 border-gray-300 text-gray-900 p-2.5 focus:outline-none grow" placeholder="PDF, Doc, CSV, or Image">
         </div>
-        <h1 class="self-start px-6 text-2xl font-light">Add Web Embed</h1>
+        <h1 class="self-start px-6 text-2xl font-light text-gray-500">Add Web Embed</h1>
         <div class="px-6 flex items-center">
             <LinkIcon class="w-6 h-6 text-slate-400"/>
             <input type="text" id="email" class="bg-transparent border-b-2 border-gray-300 text-gray-900 p-2.5 focus:outline-none grow" placeholder="Insert Website URL">
@@ -34,7 +34,7 @@ export default {
         <div class="flex space-x-2 justify-end ">
                 <button type="button" class="inline-block w-30 px-6 py-2.5 bg-zinc-300 text-zinc-400 font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-slate-500 hover:shadow-lg focus:slate-500 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-zinc-600 active:shadow-lg transition duration-150 ease-in-out font-semibold tracking-widest mr-6">ADD LINK</button>
         </div>
-        <h1 class="self-start px-6 text-2xl font-light">Add Text Item</h1>
+        <h1 class="self-start px-6 text-2xl font-light text-gray-500">Add Text Item</h1>
         <div class="px-6 flex items-center">
             <Bars3BottomLeftIcon class="w-6 h-6 text-slate-400"/>
             <input type="text" id="email" class="bg-transparent border-b-2 border-gray-300 text-gray-900 p-2.5 focus:outline-none grow" placeholder="Text Title">

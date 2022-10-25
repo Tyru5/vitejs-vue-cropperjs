@@ -1,13 +1,14 @@
 <script setup>
 import { useStore } from 'vuex';
+// Demo Components
 import NavBar from './components/NavBar.vue';
 import BulbSettings from './components/crop-types/BulbSettings.vue';
 import WeVideo from './components/crop-types/WeVideo.vue';
-// Custom image element for redner the CropperJS instance:
 import ImageElement from './components/crop-types/ImageElement.vue';
 import Designer from './components/crop-types/Designer.vue';
 import Playlist from './components/crop-types/Playlist.vue';
 import UserProfile from './components/crop-types/UserProfile.vue';
+
 import { ref } from 'vue';
 
 const store = useStore();
