@@ -1,20 +1,23 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
-import { ref } from 'vue';
+import { useStore } from 'vuex';
 
-const navigation = ref(
-  [
-    { name: 'User Profile', href: '#', current: false },
-    { name: 'Bulb Settings', href: '#', current: false },
-    { name: 'Playlist', href: '#', current: false },
-    { name: 'WeVideo', href: '#', current: true },
-  ],
-)
+const store = useStore();
+
+const props = defineProps({
+  navScreens: {
+    type: Array,
+    required: true,
+  },
+});
+
 function handleNavClicked(item) {
-  for (const page of navigation.value) {
-    if (page.name === item.name) page.current = true;
-    else page.current = false;
+  for (const page of props.navScreens) {
+    if (page.name === item.name) {
+      page.current = true;
+      store.commit('setActiveNav', page.nav);
+    } else page.current = false;
   }
 }
 </script>
@@ -41,7 +44,7 @@ function handleNavClicked(item) {
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <button v-for="item in navigation" :key="item.name" :href="item.href"
+              <button v-for="item in navScreens" :key="item.name" :href="item.href"
                 :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']"
                 :aria-current="item.current ? 'page' : undefined" @click="handleNavClicked(item)">{{ item.name }}
               </button>
@@ -53,7 +56,7 @@ function handleNavClicked(item) {
   
     <DisclosurePanel class="sm:hidden">
       <div class="space-y-1 px-2 pt-2 pb-3">
-        <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href"
+        <DisclosureButton v-for="item in navScreens" :key="item.name" as="a" :href="item.href"
           :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']"
           :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
       </div>
