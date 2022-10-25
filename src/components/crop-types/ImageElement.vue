@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, onUpdated} from 'vue';
 
-import CtrlAltElite from '../../package/src/class';
+import CtrlAltElite from '../../../package/src/class';
 
 const croppable = ref(false);
 const cropper = ref(null);
