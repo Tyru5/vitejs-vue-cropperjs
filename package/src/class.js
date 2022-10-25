@@ -65,6 +65,7 @@ class CtrlAltElite {
       imageAlt: 'Custom image to crop and edit',
       didOpen: () => {
         this.log('initializing cropperjs...');
+        this.toggleUploadLabel();
         this.initializeCropperJS();
       }
     }
@@ -153,6 +154,7 @@ class CtrlAltElite {
       imageUrl,
     });
     const cropModalResult = await Swal.fire(options);
+    console.log('cropModalResult', cropModalResult);
   }
 
   finalizeCropModalOptions({
@@ -204,8 +206,7 @@ class CtrlAltElite {
    */
   async handleImageInputElementChange(event) {
     this.log('handleImageInputElementChange()', { event });
-    this.uploadLabelElement.style.display = 'none';
-    this.uploadLabelLoadingIconElement.style.display = 'block';
+    this.toggleUploadLabel('loading');
     this.imageUrl = URL.createObjectURL(event.target.files[0]);
     this.log('this.imageUrl', this.imageUrl);
     const imageData = await this.loadImage(this.imageUrl);
@@ -213,6 +214,16 @@ class CtrlAltElite {
     this.handleImageLoad(this.imageUrl);
     this.imageUploadLabelElement.classList.remove('no-image');
     this.imageUploadLabelElement.classList.add('has-image');
+  }
+
+  toggleUploadLabel(type) {
+    if (type === 'loading') {
+      this.uploadLabelElement.style.display = 'none';
+      this.uploadLabelLoadingIconElement.style.display = 'block';
+    } else {
+      this.uploadLabelElement.style.display = 'flex';
+      this.uploadLabelLoadingIconElement.style.display = 'none';
+    }
   }
 
   /**
@@ -352,6 +363,7 @@ class CtrlAltElite {
 
       .ctrl-alt-elite-avatar .image-upload-label {
         aspect-ratio: unset;
+        border-radius: 50%;
         height: 125px;
         width: 125px;
       }
@@ -380,6 +392,10 @@ class CtrlAltElite {
         background: rgba(0,0,0,0.6);
         opacity: 0;
         transition: opacity 0.2s ease-in-out;
+      }
+
+      .ctrl-alt-elite-avatar .hover-overlay {
+        border-radius: 50%;
       }
 
       .hover-overlay * {
@@ -421,6 +437,10 @@ class CtrlAltElite {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+      }
+
+      .ctrl-alt-elite-avatar .upload-label-text {
+        font-size: 12px;
       }
     `;
 
