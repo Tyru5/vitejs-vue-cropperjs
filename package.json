@@ -13,13 +13,9 @@
     "@heroicons/vue": "^2.0.12",
     "cropperjs": "^1.5.12",
     "lodash": "^4.17.21",
-<<<<<<< HEAD
     "uuid": "^9.0.0",
-    "vue": "^3.2.41"
-=======
     "vue": "^3.2.41",
     "vuex": "^4.0.2"
->>>>>>> 7557e2dfc823070a003c385bd38abb7d95158d40
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.2",
