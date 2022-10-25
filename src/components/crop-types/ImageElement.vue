@@ -11,11 +11,11 @@ defineProps({
 });
 
 function initializeCropperJS() {
-  const image = document.getElementById('image');
+  const image = document.getElementById('target');
   const options = {
     debug: true,
     debugPrefix: 'CtrlAltElite',
-    cropView: 'portrait',
+    cropView: 'avatar',
     elementId: 'unique',
     cropperjs: {
       aspectRatio: 1,
@@ -41,7 +41,7 @@ onMounted(() => {
 
   <!-- Wrap the image or canvas element with a block element (container) -->
   <div class="flex-center">
-    <img id="image" />
+    <img id="target" />
   </div>
 </template>
 

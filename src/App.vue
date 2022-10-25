@@ -20,6 +20,7 @@ const navOptions = ref(
     { name: 'Playlist', nav: 'playlist', href: '#', current: false },
     { name: 'WeVideo', nav: 'weVideo', href: '#', current: false },
     { name: 'Designer', nav: 'designer', href: '#', current: false },
+    { name: 'Standalone', nav: 'standalone', href: '#', current: false },
   ],
 )
 </script>
@@ -31,7 +32,7 @@ const navOptions = ref(
   <Designer v-else-if="store.state.activeNav === 'designer'"></Designer>
   <Playlist v-else-if="store.state.activeNav === 'playlist'"></Playlist>
   <UserProfile v-else-if="store.state.activeNav === 'userProfile'"></UserProfile>
-  <ImageElement v-else msg="Vite + Vue + CropperJS" image-ref="../src/assets/ty.jpg" />
+  <ImageElement v-else-if="store.state.activeNav === 'standalone'" msg="Vite + Vue + CropperJS" />
 </template>
 
 <style scoped>

@@ -27,7 +27,7 @@ class CtrlAltElite {
   #defaultInitializationOptions = {
     uploadUrl: 'https://my-website.com/image/upload',
     replaceExistingElement: true,
-    allowedImageTypes: [
+    allowedImageTypes: [ // long term goal
       'jpg',
       'png',
       'svg'
@@ -39,15 +39,14 @@ class CtrlAltElite {
       'portrait',
       'avatar',
     ],
-    onSuccess: () => {
-
-    },
+    onSuccess: () => {},
     cropperjs: {
-      viewMode: 1,
+      viewMode: 3,
       dragMode: 'crop',
       initialAspectRatio: 16/9,
       responsive: true,
       autoCropArea: 0.5,
+      background: false,
       modal: false,
       ready: () => {
         this.log('CropperJS is ready!')
@@ -56,18 +55,23 @@ class CtrlAltElite {
     sweetAlert: {
       imageWidth: 500,
       imageHeight: 500,
-      title: 'Image Edit:',
+      title: '',
       text: '',
-      width: '50%',
-      height: '50%',
+      width: '70%',
+      height: '70%',
       customClass: {
         container: '',
         title: '',
         icon: '',
         cancelButton: '',
+        actions: 'ctrl-alt-elite-actions-container',
       },
       imageUrl: '',
       imageAlt: 'Custom image to crop and edit',
+      confirmButtonText: 'Crop',
+      allowOutsideClick: false,
+      showCancelButton: true,
+      showCloseButton: true, // x in the top right
       didOpen: () => {
         this.log('initializing cropperjs...');
         this.initializeCropperJS();
@@ -159,9 +163,12 @@ class CtrlAltElite {
   } = {}) {
     this.imageInputElement.value = '';
     if (isConfirmed) {
-      if (this.imageElement) this.imageElement.src = this.#cropperJS.url;
+      const croppedImgSrc = this.#cropperJS.getCroppedCanvas().toDataURL();
+      if (this.imageElement) {
+        this.imageElement.src = croppedImgSrc;
+      }
       if (_.isFunction(this.#finalPluginOptions.onSuccess)) {
-        this.#finalPluginOptions.onSuccess(this.#cropperJS);
+        this.#finalPluginOptions.onSuccess(croppedImgSrc);
       }
     }
   }
@@ -199,13 +206,6 @@ class CtrlAltElite {
         text: 'You passed an invalid crop view!',
       });
       throw Error('Invalid crop view! It can be either: \'landscape\' or \'avatar\'');
-    }
-    // if (cropView === 'landscape') {
-
-    // }
-    if (cropView === 'avatar') {
-      this.log('avatar crop class styling', sweetAlertoptions);
-      // sweetAlertoptions.customClass.container = 'ctrl-alt-elite-avatar-crop';
     }
     return sweetAlertoptions;
   }
@@ -551,6 +551,10 @@ class CtrlAltElite {
 
       .ctrl-alt-elite-new.ctrl-alt-elite-avatar img {
         border-radius: 50%;
+      }
+
+      .swal2-popup {
+        border-radis: 17px;
       }
     `;
 
