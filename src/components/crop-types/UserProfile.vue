@@ -26,8 +26,7 @@ function initializeCropperJS() {
 }
 
 onMounted(() => {
-  console.log('Mounted!');
-  initializeCropperJS();
+  if (!document.querySelector('.ctrl-alt-elite')) initializeCropperJS();
 });
 </script>
 
