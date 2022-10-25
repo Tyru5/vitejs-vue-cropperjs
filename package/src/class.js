@@ -47,6 +47,9 @@ class CtrlAltElite {
    */
    #finalPluginOptions;
 
+   /**
+    * CropperJS instance.
+    */
    #cropperJS = null;
 
   constructor(elementSelector, options = {}) {
@@ -58,17 +61,29 @@ class CtrlAltElite {
     this.updateOptions(options);
     this.injectRecommendedStyles();
     this.initializeElements();
-    setTimeout( () => {
-      this.testSwal();
-    }, 5000);
   }
 
-  testSwal() {
-    Swal.fire({
-      title: 'Error!',
-      text: 'Do you want to continue',
-      icon: 'error',
-      confirmButtonText: 'Cool'
+  /**
+   * 
+   * @param {*} param0 
+   */
+  async openCropModal({
+    imageUrl,
+  } = {}) {
+    // need to add styling to make it look better and more official.
+    const cropModal = await Swal.fire({
+      title: 'Sweet!',
+      text: 'Modal with a custom image.',
+      width: '70%',
+      height: '70%',
+      imageUrl: imageUrl,
+      imageWidth: this.imageWidth,
+      imageHeight: this.imageHeight,
+      imageAlt: 'Custom image to crop and edit',
+      didOpen: () => {
+        this.log('initializing cropperjs...');
+        this.initializeCropperJS();
+      }
     });
   }
 
@@ -83,6 +98,10 @@ class CtrlAltElite {
     if (this.debug) console.log(`%c[${this.debugPrefix}]`, 'color: white; background: #2196F3', ...args);
   }
 
+  /**
+   * 
+   * @param {*} elementSelector 
+   */
   updateElement(elementSelector) {
     if (
       !_.isElement(elementSelector)
@@ -100,36 +119,29 @@ class CtrlAltElite {
     }
   }
 
+  /**
+   * 
+   * @param {*} options 
+   */
   updateOptions(options) {
     this.#finalPluginOptions = _.merge(this.#defaultInitializationOptions, options || {});
   }
 
+  /**
+   * 
+   * @param {*} imageUrl 
+   */
   handleImageLoad(imageUrl) {
-    const rect = this.imageUploadLabelElement.getBoundingClientRect();
-    this.log('rect', rect);
-    this.modalDiv = document.createElement('div');
-    this.modalImage = document.createElement('img');
-    this.modalImage.src = this.imageUrl;
-    this.modalImage.classList.add('ctrl-alt-elite-hidden-modal-image');
-    this.modalDiv.classList.add('ctrl-alt-elite-modal-div');
-    this.modalImage.classList.add('ctrl-alt-elite-modal-image');
-    this.modalDiv.style.position = 'absolute';
-    this.modalDiv.style.top = `${rect.top}px`;
-    this.modalDiv.style.bottom = `${rect.bottom}px`;
-    this.modalDiv.style.left = `${rect.left}px`;
-    this.modalDiv.style.right = `${rect.right}px`;
-    this.modalDiv.style.height = `${rect.height}px`;
-    this.modalDiv.style.width = `${rect.width}px`;
-    this.modalDiv.style.backgroundImage = `url('${imageUrl}')`;
-    document.body.appendChild(this.modalDiv);
-    this.modalDiv.appendChild(this.modalImage);
-    setTimeout(() => {
-      this.modalDiv.classList.add('expand-to-fullscreen');
-      this.modalImage.classList.add('expand-to-fullscreen');
-      this.initializeCropperJS();
-    }, 500);
+    this.openCropModal({
+      imageUrl,
+    });
   }
 
+  /**
+   * 
+   * @param {*} src 
+   * @returns 
+   */
   loadImage(src) {
     return new Promise((resolve, reject) => {
       const image = new Image();
@@ -139,19 +151,40 @@ class CtrlAltElite {
     });
   }
 
+  /**
+   * 
+   * @param {*} event 
+   */
   async handleImageInputElementChange(event) {
-    console.log('handleImageInputElementChange()', this);
+    this.log('handleImageInputElementChange()', { event });
     this.uploadLabelElement.style.display = 'none';
     this.uploadLabelLoadingIconElement.style.display = 'block';
     this.imageUrl = URL.createObjectURL(event.target.files[0]);
-    console.log('this.imageUrl', this.imageUrl);
-    await this.loadImage(this.imageUrl);
+    this.log('this.imageUrl', this.imageUrl);
+    const imageData = await this.loadImage(this.imageUrl);
+    this.log({ imageData });
     this.imageElement.src = this.imageUrl;
     this.handleImageLoad(this.imageUrl);
     this.imageUploadLabelElement.classList.remove('no-image');
     this.imageUploadLabelElement.classList.add('has-image');
   }
 
+  /**
+   * 
+   */
+  handleImageOnload() {
+    this.imageWidth = this.width;
+    this.imageHeight = this.height;
+    console.log({
+      width: this.imageWidth,
+      height: this.imageHeight,
+    });
+  }
+
+  /**
+   * 
+   * @returns 
+   */
   hasImageBeenAdded() {
     return !!this.imageUrl;
   }
@@ -196,7 +229,7 @@ class CtrlAltElite {
     imageInputElement.classList.add('hidden-file-upload-input');
     imageInputElement.addEventListener('change', this.handleImageInputElementChange.bind(this));
 
-    this.imageElement.classList.add('ctrl-alt-elite-img');
+    this.imageElement.onload = this.handleImageOnload;
 
     this.uploadLabelElement.appendChild(uploadLabelIconElement);
     this.uploadLabelElement.appendChild(this.uploadLabelTextElement);
@@ -207,7 +240,10 @@ class CtrlAltElite {
     this.imageUploadLabelElement.appendChild(hoverOverlayElement);
     this.imageUploadLabelElement.appendChild(uploadLabelWrapperElement);
     this.imageUploadLabelElement.appendChild(imageInputElement);
-    this.imageUploadLabelElement.appendChild(this.imageElement);
+
+    // Needed to be commented out so we obtain the correct image dimensions
+    // this.imageElement.classList.add('ctrl-alt-elite-img');
+    // this.imageUploadLabelElement.appendChild(this.imageElement);
 
     ctrlAltEliteElement.appendChild(this.imageUploadLabelElement);
 
@@ -215,66 +251,22 @@ class CtrlAltElite {
     this.rootElement = ctrlAltEliteElement;
   }
 
-  #initializeCropperJsActions() {
-    const cropperActionsContainer = document.createElement('div');
-    cropperActionsContainer.classList.add('ctrl-alt-elite-cropper-actions-container');
-    const [
-      resetAction,
-      destroyAction,
-    ] = [
-      document.createElement('button'),
-      document.createElement('button'),
-    ];
-    resetAction.textContent = 'Reset';
-    destroyAction.textContent = 'Destroy';
-
-    // Setup button actions:
-    resetAction.addEventListener('click', this.handleCropperJsReset.bind(this));
-    destroyAction.addEventListener('click', this.handleCropperJsDestroy.bind(this));
-
-    resetAction.classList.add('ctrl-alt-elite-reset-action');
-    destroyAction.classList.add('ctrl-alt-elite-destroy-action');
-    // Add butons as child elements to the actions container div element:
-    // Would normally create a DocumentFragment for multiple node additions, however we don't have many to worry about here.
-    // Well... maybe haha.
-    cropperActionsContainer.appendChild(resetAction);
-    cropperActionsContainer.appendChild(destroyAction);
-
-    this.modalDiv.appendChild(cropperActionsContainer);
-  }
-
+  /**
+   * 
+   */
   initializeCropperJS() {
-    setTimeout( () => {
-      this.log('`initializeCropperJS()`');
-      this.#cropperJS = new Cropper(this.modalImage, this.#finalPluginOptions);
-      this.modalImage.classList.remove('ctrl-alt-elite-hidden-modal-image');
-      this.log('cropperjs instance created: ', this.#cropperJS);
-      this.#initializeCropperJsActions();
-    }, 500);
+    this.log('`initializeCropperJS()`');
+    const swalImage = document.getElementsByClassName('swal2-image');
+    this.#cropperJS = new Cropper(swalImage[0], this.#finalPluginOptions);
+    this.log('cropperjs instance created: ', this.#cropperJS);
   }
 
-  handleCropperJsReset() {
-    this.#cropperJS.reset();
-  }
-
-  // TODO clean: doesn't really work...
-  handleCropperJsDestroy() {
-    console.log('in here...');
-    this.#cropperJS.destroy();
-    this.modalDiv.remove();
-    this.modalImage.remove();
-    this.imageElement.remove();
-    this.uploadLabelLoadingIconElement.remove();
-    this.imageUploadLabelElement.classList.remove('has-image');
-    this.imageUploadLabelElement.classList.add('no-image');
-    this.uploadLabelElement.style.display  = '';
-
-    this.initializeElements();
-  }
-
+  /**
+   * Inject package styles.
+   */
   injectRecommendedStyles() {
     const css = `
-      @keyframes spin { 
+      @keyframes spin {
         100% { 
           transform:rotate(360deg); 
         } 
@@ -387,28 +379,6 @@ class CtrlAltElite {
         aspect-ratio: 16/9;
         max-height: 100%;
         max-width: 100%;
-      }
-
-      .ctrl-alt-elite-modal-div, .ctrl-alt-elite-modal-image {
-        transition: all 0.3s ease-in-out;
-        background-blend-mode: multiply;
-        background-size: cover;
-      }
-
-      .expand-to-fullscreen {
-        animation: 0.75s linear 1 expand-to-fullscreen;
-        animation-fill-mode: forwards;
-      }
-
-      .ctrl-alt-elite-modal-image.expand-to-fullscreen {
-        display: block;
-        border-radius: 17px;
-        /* This rule is very important, please don't ignore this */
-        max-width: 100%;
-      }
-
-      .ctrl-alt-elite-hidden-modal-image {
-        display: none;
       }
 
       #ctrl-alt-elite-avatar-crop {
