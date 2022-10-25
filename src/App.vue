@@ -2,6 +2,7 @@
 import { useStore } from 'vuex';
 import NavBar from './components/NavBar.vue';
 import BulbSettings from './components/crop-types/BulbSettings.vue';
+import WeVideo from './components/crop-types/WeVideo.vue';
 // Custom image element for redner the CropperJS instance:
 import ImageElement from './components/crop-types/ImageElement.vue';
 import { ref } from 'vue';
@@ -21,6 +22,7 @@ const navOptions = ref(
 <template>
   <NavBar :navScreens="navOptions"></NavBar>
   <BulbSettings v-if="store.state.activeNav === 'bulbSettings'"></BulbSettings>
+  <WeVideo v-else-if="store.state.activeNav === 'weVideo'"></WeVideo>
   <ImageElement v-else msg="Vite + Vue + CropperJS" image-ref="../src/assets/ty.jpg" />
 </template>
 
