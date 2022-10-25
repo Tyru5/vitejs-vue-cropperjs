@@ -23,7 +23,6 @@ function initializeCropperJS() {
       viewMode: 1,
       ready: () => {
         croppable.value = true;
-        console.log('YEET!');
       },
     }
   };

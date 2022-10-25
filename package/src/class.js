@@ -489,7 +489,7 @@ class CtrlAltElite {
         transition: opacity 0.2s ease-in-out;
       }
 
-      .ctrl-alt-elite-new .ctrl-alt-elite-avatar .hover-overlay {
+      .ctrl-alt-elite-new.ctrl-alt-elite-avatar .hover-overlay {
         border-radius: 50%;
       }
 
