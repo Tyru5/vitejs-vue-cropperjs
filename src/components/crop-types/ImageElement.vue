@@ -15,7 +15,7 @@ function initializeCropperJS() {
   const options = {
     debug: true,
     debugPrefix: 'CtrlAltElite',
-    cropView: 'avatar',
+    cropView: 'portrait',
     elementId: 'unique',
     cropperjs: {
       aspectRatio: 1,

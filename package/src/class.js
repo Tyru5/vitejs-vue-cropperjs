@@ -32,9 +32,10 @@ class CtrlAltElite {
       'svg'
     ],
     elementId: null,
-    cropView: 'banner',
+    cropView: 'landscape',
     allowedCropViews: [
-      'banner',
+      'landscape',
+      'portrait',
       'avatar',
     ],
     cropperjs: {
@@ -90,6 +91,8 @@ class CtrlAltElite {
     this.updateOptions(options);
     this.injectRecommendedStyles();
     this.initializeElements();
+    this.finalizeInitialization();
+    window.ctrlAltElite = this;
   }
 
   /**
@@ -142,6 +145,15 @@ class CtrlAltElite {
     });
   }
 
+  handleCropModalClose({
+    isConfirmed,
+    isDenied,
+    isDismissed,
+  } = {}) {
+    if (isConfirmed) this.imageElement.src = this.#cropperJS.url;
+    this.imageInputElement.value = '';
+  }
+
   /**
    * 
    * @param {*} param0 
@@ -154,7 +166,7 @@ class CtrlAltElite {
       imageUrl,
     });
     const cropModalResult = await Swal.fire(options);
-    console.log('cropModalResult', cropModalResult);
+    this.handleCropModalClose(cropModalResult);
   }
 
   finalizeCropModalOptions({
@@ -174,9 +186,9 @@ class CtrlAltElite {
         title: 'Oops...',
         text: 'You passed an invalid crop view!',
       });
-      throw Error('Invalid crop view! It can be either: \'banner\' or \'avatar\'');
+      throw Error('Invalid crop view! It can be either: \'landscape\' or \'avatar\'');
     }
-    // if (cropView === 'banner') {
+    // if (cropView === 'landscape') {
 
     // }
     if (cropView === 'avatar') {
@@ -209,7 +221,7 @@ class CtrlAltElite {
     this.toggleUploadLabel('loading');
     this.imageUrl = URL.createObjectURL(event.target.files[0]);
     this.log('this.imageUrl', this.imageUrl);
-    const imageData = await this.loadImage(this.imageUrl);
+    await this.loadImage(this.imageUrl);
     this.imageElement.src = this.imageUrl;
     this.handleImageLoad(this.imageUrl);
     this.imageUploadLabelElement.classList.remove('no-image');
@@ -246,31 +258,32 @@ class CtrlAltElite {
    * 
    */
   initializeElements() {
-    const ctrlAltEliteElement = document.createElement('div');
+    this.ctrlAltEliteElement = document.createElement('div');
     this.imageUploadLabelElement = document.createElement('label');
-    const hoverOverlayElement = document.createElement('div');
-    const uploadLabelWrapperElement = document.createElement('div');
+    this.hoverOverlayElement = document.createElement('div');
+    this.uploadLabelWrapperElement = document.createElement('div');
     this.uploadLabelElement = document.createElement('div');
-    const uploadLabelIconElement = document.createElement('span');
+    this.uploadLabelIconElement = document.createElement('span');
     this.uploadLabelTextElement = document.createElement('span');
     this.uploadLabelLoadingIconElement = document.createElement('span');
-    const imageInputElement = document.createElement('input');
+    this.imageInputElement = document.createElement('input');
     this.imageElement = document.createElement('img');
 
-    ctrlAltEliteElement.classList.add('ctrl-alt-delete');
-    if (this.#finalPluginOptions.cropView === 'avatar') ctrlAltEliteElement.classList.add('ctrl-alt-elite-avatar');
+    this.ctrlAltEliteElement.classList.add('ctrl-alt-elite');
+    if (this.#finalPluginOptions.cropView === 'avatar') this.ctrlAltEliteElement.classList.add('ctrl-alt-elite-avatar');
+    else if (this.#finalPluginOptions.cropView === 'portrait') this.ctrlAltEliteElement.classList.add('ctrl-alt-elite-portrait');
 
     this.imageUploadLabelElement.classList.add('image-upload-label', 'no-image');
     this.imageUploadLabelElement.htmlFor = this.#finalPluginOptions.elementId;
 
-    hoverOverlayElement.classList.add('hover-overlay', 'absolute-full-cover', 'flex-all-center');
+    this.hoverOverlayElement.classList.add('hover-overlay', 'absolute-full-cover', 'flex-all-center');
 
-    uploadLabelWrapperElement.classList.add('upload-label-wrapper', 'absolute-full-cover', 'flex-all-center');
+    this.uploadLabelWrapperElement.classList.add('upload-label-wrapper', 'absolute-full-cover', 'flex-all-center');
 
     this.uploadLabelElement.classList.add('upload-label');
 
-    uploadLabelIconElement.classList.add('upload-label-icon', 'material-icons');
-    uploadLabelIconElement.textContent = 'image';
+    this.uploadLabelIconElement.classList.add('upload-label-icon', 'material-icons');
+    this.uploadLabelIconElement.textContent = 'image';
 
     this.uploadLabelLoadingIconElement.classList.add('upload-label-loading-icon', 'material-icons', 'spin');
     this.uploadLabelLoadingIconElement.textContent = 'incomplete_circle';
@@ -278,30 +291,36 @@ class CtrlAltElite {
     this.uploadLabelTextElement.classList.add('upload-label-text');
     this.uploadLabelTextElement.textContent = 'Upload an image.';
 
-    imageInputElement.id = this.#finalPluginOptions.elementId;
-    imageInputElement.name = this.#finalPluginOptions.elementId;
-    imageInputElement.type = 'file';
-    imageInputElement.accept = 'image/*';
-    imageInputElement.ariaLabel = 'Press enter to open the file browser where you can select an image to upload.';
-    imageInputElement.classList.add('hidden-file-upload-input');
-    imageInputElement.addEventListener('change', this.handleImageInputElementChange.bind(this));
+    this.imageInputElement.id = this.#finalPluginOptions.elementId;
+    this.imageInputElement.name = this.#finalPluginOptions.elementId;
+    this.imageInputElement.type = 'file';
+    this.imageInputElement.accept = 'image/*';
+    this.imageInputElement.ariaLabel = 'Press enter to open the file browser where you can select an image to upload.';
+    this.imageInputElement.classList.add('hidden-file-upload-input');
+    this.imageInputElement.addEventListener('change', this.handleImageInputElementChange.bind(this));
 
     this.imageElement.onload = this.handleImageOnload;
 
-    this.uploadLabelElement.appendChild(uploadLabelIconElement);
+    this.uploadLabelElement.appendChild(this.uploadLabelIconElement);
     this.uploadLabelElement.appendChild(this.uploadLabelTextElement);
 
-    uploadLabelWrapperElement.appendChild(this.uploadLabelElement);
-    uploadLabelWrapperElement.appendChild(this.uploadLabelLoadingIconElement);
+    this.uploadLabelWrapperElement.appendChild(this.uploadLabelElement);
+    this.uploadLabelWrapperElement.appendChild(this.uploadLabelLoadingIconElement);
 
-    this.imageUploadLabelElement.appendChild(hoverOverlayElement);
-    this.imageUploadLabelElement.appendChild(uploadLabelWrapperElement);
-    this.imageUploadLabelElement.appendChild(imageInputElement);
+    this.imageUploadLabelElement.appendChild(this.hoverOverlayElement);
+    this.imageUploadLabelElement.appendChild(this.uploadLabelWrapperElement);
+    this.imageUploadLabelElement.appendChild(this.imageInputElement);
+    this.imageUploadLabelElement.appendChild(this.imageElement);
 
-    ctrlAltEliteElement.appendChild(this.imageUploadLabelElement);
+    this.ctrlAltEliteElement.appendChild(this.imageUploadLabelElement);
 
-    this.originalElement.parentNode.replaceChild(ctrlAltEliteElement, this.originalElement);
-    this.rootElement = ctrlAltEliteElement;
+    this.originalElement.parentNode.replaceChild(this.ctrlAltEliteElement, this.originalElement);
+    this.rootElement = this.ctrlAltEliteElement;
+  }
+
+  async finalizeInitialization() {
+    await document.fonts.ready;
+    this.ctrlAltEliteElement.classList.add('ctrl-alt-elite-initialized');
   }
 
   /**
@@ -347,6 +366,14 @@ class CtrlAltElite {
         font-family: sans-serif;
       }
 
+      .ctrl-alt-elite .material-icons {
+        opacity: 0;
+      }
+
+      .ctrl-alt-elite-initialized .material-icons {
+        opacity: 1;
+      }
+
       .image-upload-label {
         display: flex;
         justify-content: center;
@@ -366,6 +393,12 @@ class CtrlAltElite {
         border-radius: 50%;
         height: 125px;
         width: 125px;
+      }
+
+      .ctrl-alt-elite-portrait .image-upload-label {
+        aspect-ratio: 9/16;
+        height: 200px;
+        width: 113px;
       }
 
       .absolute-full-cover {
@@ -439,8 +472,19 @@ class CtrlAltElite {
         align-items: center;
       }
 
-      .ctrl-alt-elite-avatar .upload-label-text {
+      .ctrl-alt-elite-avatar .upload-label-text,
+      .ctrl-alt-elite-portrait .upload-label-text {
         font-size: 12px;
+      }
+
+      .ctrl-alt-elite img {
+        height: 100%;
+        width: 100%;
+        z-index: 2;
+      }
+
+      .ctrl-alt-elite-avatar img {
+        border-radius: 50%;
       }
     `;
 
@@ -479,9 +523,11 @@ function scriptLoaded() {
 }
 
 if (typeof document !== 'undefined') {
+  if (!document.fonts.check('1rem Material Icons')) {
+    injectCss('https://fonts.googleapis.com/icon?family=Material+Icons');
+  }
   injectCss('https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css');
   loadScript('https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js', scriptLoaded);
-  injectCss('https://fonts.googleapis.com/icon?family=Material+Icons');
 }
 
 CtrlAltElite.VERSION = '1.0.0';
