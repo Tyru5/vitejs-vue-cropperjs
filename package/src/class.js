@@ -25,21 +25,49 @@ let Cropperjs = {
 class CtrlAltElite {
 
   #defaultInitializationOptions = {
-    uploadUrl: 'https://my-website.com/image/upload', // TODO TAM: clean
+    uploadUrl: 'https://my-website.com/image/upload',
     allowedImageTypes: [
       'jpg',
       'png',
       'svg'
     ],
     elementId: null,
-    viewMode: 1,
-    dragMode: 'crop',
-    initialAspectRatio: 1,
-    responsive: true,
-    autoCropArea: 0.5,
-    ready: () => {
-      this.log('CropperJS is ready!')
+    cropView: 'banner',
+    allowedCropViews: [
+      'banner',
+      'avatar',
+    ],
+    cropperjs: {
+      viewMode: 1,
+      dragMode: 'crop',
+      initialAspectRatio: 16/9,
+      responsive: true,
+      autoCropArea: 0.5,
+      modal: false,
+      ready: () => {
+        this.log('CropperJS is ready!')
+      },
     },
+    sweetAlert: {
+      imageWidth: 500,
+      imageHeight: 500,
+      title: 'Image Edit:',
+      text: '',
+      width: '50%',
+      height: '50%',
+      customClass: {
+        container: '',
+        title: '',
+        icon: '',
+        cancelButton: '',
+      },
+      imageUrl: '',
+      imageAlt: 'Custom image to crop and edit',
+      didOpen: () => {
+        this.log('initializing cropperjs...');
+        this.initializeCropperJS();
+      }
+    }
   };
 
   /**
@@ -61,30 +89,6 @@ class CtrlAltElite {
     this.updateOptions(options);
     this.injectRecommendedStyles();
     this.initializeElements();
-  }
-
-  /**
-   * 
-   * @param {*} param0 
-   */
-  async openCropModal({
-    imageUrl,
-  } = {}) {
-    // need to add styling to make it look better and more official.
-    const cropModal = await Swal.fire({
-      title: 'Sweet!',
-      text: 'Modal with a custom image.',
-      width: '70%',
-      height: '70%',
-      imageUrl: imageUrl,
-      imageWidth: this.imageWidth,
-      imageHeight: this.imageHeight,
-      imageAlt: 'Custom image to crop and edit',
-      didOpen: () => {
-        this.log('initializing cropperjs...');
-        this.initializeCropperJS();
-      }
-    });
   }
 
   /**
@@ -139,6 +143,49 @@ class CtrlAltElite {
 
   /**
    * 
+   * @param {*} param0 
+   */
+   async openCropModal({
+    imageUrl,
+  } = {}) {
+    // need to add styling to make it look better and more official.
+    const options = this.finalizeCropModalOptions({
+      imageUrl,
+    });
+    const cropModalResult = await Swal.fire(options);
+  }
+
+  finalizeCropModalOptions({
+    imageUrl,
+  } = {}) {
+    const { allowedCropViews } = this.#finalPluginOptions;
+    const sweetAlertoptions = {
+      ...this.#finalPluginOptions.sweetAlert,
+      ...{
+        imageUrl,
+      }
+    };
+    const { cropView } = this.#finalPluginOptions;
+    if (!allowedCropViews.includes(cropView)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You passed an invalid crop view!',
+      });
+      throw Error('Invalid crop view! It can be either: \'banner\' or \'avatar\'');
+    }
+    // if (cropView === 'banner') {
+
+    // }
+    if (cropView === 'avatar') {
+      this.log('avatar crop class styling', sweetAlertoptions);
+      // sweetAlertoptions.customClass.container = 'ctrl-alt-elite-avatar-crop';
+    }
+    return sweetAlertoptions;
+  }
+
+  /**
+   * 
    * @param {*} src 
    * @returns 
    */
@@ -162,7 +209,6 @@ class CtrlAltElite {
     this.imageUrl = URL.createObjectURL(event.target.files[0]);
     this.log('this.imageUrl', this.imageUrl);
     const imageData = await this.loadImage(this.imageUrl);
-    this.log({ imageData });
     this.imageElement.src = this.imageUrl;
     this.handleImageLoad(this.imageUrl);
     this.imageUploadLabelElement.classList.remove('no-image');
@@ -175,10 +221,6 @@ class CtrlAltElite {
   handleImageOnload() {
     this.imageWidth = this.width;
     this.imageHeight = this.height;
-    console.log({
-      width: this.imageWidth,
-      height: this.imageHeight,
-    });
   }
 
   /**
@@ -189,6 +231,9 @@ class CtrlAltElite {
     return !!this.imageUrl;
   }
 
+  /**
+   * 
+   */
   initializeElements() {
     const ctrlAltEliteElement = document.createElement('div');
     this.imageUploadLabelElement = document.createElement('label');
@@ -241,10 +286,6 @@ class CtrlAltElite {
     this.imageUploadLabelElement.appendChild(uploadLabelWrapperElement);
     this.imageUploadLabelElement.appendChild(imageInputElement);
 
-    // Needed to be commented out so we obtain the correct image dimensions
-    // this.imageElement.classList.add('ctrl-alt-elite-img');
-    // this.imageUploadLabelElement.appendChild(this.imageElement);
-
     ctrlAltEliteElement.appendChild(this.imageUploadLabelElement);
 
     this.originalElement.parentNode.replaceChild(ctrlAltEliteElement, this.originalElement);
@@ -252,12 +293,12 @@ class CtrlAltElite {
   }
 
   /**
-   * 
+   * Initialize the CropperJS instance.
    */
   initializeCropperJS() {
     this.log('`initializeCropperJS()`');
     const swalImage = document.getElementsByClassName('swal2-image');
-    this.#cropperJS = new Cropper(swalImage[0], this.#finalPluginOptions);
+    this.#cropperJS = new Cropper(swalImage[0], this.#finalPluginOptions.cropperjs);
     this.log('cropperjs instance created: ', this.#cropperJS);
   }
 
@@ -265,7 +306,7 @@ class CtrlAltElite {
    * Inject package styles.
    */
   injectRecommendedStyles() {
-    const css = `
+    let css = `
       @keyframes spin {
         100% { 
           transform:rotate(360deg); 
@@ -374,32 +415,22 @@ class CtrlAltElite {
         justify-content: center;
         align-items: center;
       }
+    `;
 
-      .ctrl-alt-elite-img {
-        aspect-ratio: 16/9;
-        max-height: 100%;
-        max-width: 100%;
-      }
-
-      #ctrl-alt-elite-avatar-crop {
+    if (this.#finalPluginOptions.cropView === 'avatar') {
+      css += `
         .cropper-view-box,
         .cropper-face {
           border-radius: 50%;
         }
 
-        /* The css styles for outline do not follow border-radius on iOS/Safari (#979). */
+        /* The css styles for outline do not followborder-radius on iOS/Safari (#979). */
         .cropper-view-box {
             outline: 0;
             box-shadow: 0 0 0 1px #39f;
         }
-      }
-
-      .ctrl-alt-elite-cropper-actions-container {
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-      }
-    `;
+      `;
+    }
 
     const head = document.head || document.getElementsByTagName('head')[0];
     const style = document.createElement('style');
