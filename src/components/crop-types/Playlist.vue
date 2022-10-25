@@ -12,9 +12,9 @@ function initializeCropperJS() {
     cropView: 'portrait',
     elementId: 'unique',
     replaceExistingElement: false,
-    onSuccess(cropperJs) {
+    onSuccess(imageUrl) {
       const targetElement = document.getElementById('target');
-      targetElement.style.backgroundImage = `url('${cropperJs.url}')`;
+      targetElement.style.backgroundImage = `url('${imageUrl}')`;
     },
     cropperjs: {
       aspectRatio: 1,

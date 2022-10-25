@@ -104,7 +104,6 @@ class CtrlAltElite {
       this.initializeExistingElement();
     }
     this.finalizeInitialization();
-    window.ctrlAltElite = this;
   }
 
   /**
@@ -163,16 +162,13 @@ class CtrlAltElite {
     isDismissed,
   } = {}) {
     this.imageInputElement.value = '';
-    console.log('isConfirmed', isConfirmed);
     if (isConfirmed) {
+      const croppedImgSrc = this.#cropperJS.getCroppedCanvas().toDataURL();
       if (this.imageElement) {
-        // this.imageElement.src = this.#cropperJS.url;
-        const croppedImgSrc = this.#cropperJS.getCroppedCanvas().toDataURL();
         this.imageElement.src = croppedImgSrc;
       }
-      this.log('_.isFunction(this.onSuccess)', _.isFunction(this.onSuccess));
       if (_.isFunction(this.#finalPluginOptions.onSuccess)) {
-        this.#finalPluginOptions.onSuccess(this.#cropperJS);
+        this.#finalPluginOptions.onSuccess(croppedImgSrc);
       }
     }
   }
@@ -350,6 +346,7 @@ class CtrlAltElite {
 
     this.uploadLabelLoadingIconElement.classList.add('upload-label-loading-icon', 'material-icons', 'spin');
     this.uploadLabelLoadingIconElement.textContent = 'incomplete_circle';
+    this.uploadLabelLoadingIconElement.style.color = '#757575';
 
     this.uploadLabelTextElement.classList.add('upload-label-text');
     this.uploadLabelTextElement.textContent = 'Upload an image.';
