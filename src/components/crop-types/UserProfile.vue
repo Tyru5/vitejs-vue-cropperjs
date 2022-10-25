@@ -9,7 +9,7 @@ function initializeCropperJS() {
   const options = {
     debug: true,
     debugPrefix: 'CtrlAltElite',
-    cropView: 'portrait',
+    cropView: 'avatar',
     elementId: 'unique',
     replaceExistingElement: false,
     onSuccess(imageUrl) {

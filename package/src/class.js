@@ -558,20 +558,8 @@ class CtrlAltElite {
       }
     `;
 
-    if (this.#finalPluginOptions.cropView === 'avatar') {
-      css += `
-        .cropper-view-box,
-        .cropper-face {
-          border-radius: 50%;
-        }
-
-        /* The css styles for outline do not followborder-radius on iOS/Safari (#979). */
-        .cropper-view-box {
-            outline: 0;
-            box-shadow: 0 0 0 1px #39f;
-        }
-      `;
-    }
+    const avatarStyling = this.handleAddingAvatarCropViewStyling();
+    if (avatarStyling) css += avatarStyling;
 
     const head = document.head || document.getElementsByTagName('head')[0];
     const style = document.createElement('style');
@@ -602,6 +590,9 @@ class CtrlAltElite {
       }
     `;
 
+    const avatarStyling = this.handleAddingAvatarCropViewStyling();
+    if (avatarStyling) css += avatarStyling;
+
     const head = document.head || document.getElementsByTagName('head')[0];
     const style = document.createElement('style');
     style.id = 'ctrl-alt-delete-styles';
@@ -609,6 +600,24 @@ class CtrlAltElite {
     if (style.styleSheet) style.styleSheet.cssText = css;
     else style.appendChild(document.createTextNode(css));
     head.appendChild(style);
+  }
+
+  handleAddingAvatarCropViewStyling() {
+    if (this.#finalPluginOptions.cropView === 'avatar') {
+      return `
+        .cropper-view-box,
+        .cropper-face {
+          border-radius: 50%;
+        }
+
+        /* The css styles for outline do not followborder-radius on iOS/Safari (#979). */
+        .cropper-view-box {
+            outline: 0;
+            box-shadow: 0 0 0 1px #39f;
+        }
+      `;
+    }
+    return false;
   }
 
 }
