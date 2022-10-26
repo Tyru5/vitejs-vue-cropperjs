@@ -2,10 +2,7 @@ import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
 
-import {
-  loadScript,
-  injectCss
-} from '../utilities/index.js';
+import { loadScript, injectCss } from '../utilities/index.js';
 
 let Cropperjs = {
   isScriptReady: false,
@@ -13,7 +10,7 @@ let Cropperjs = {
 
 /**
  * CtrlAltElite npm package.
- * 
+ *
  * Example usage:
  * const ctrlAltElite = new CtrlAltElite('#my-element', {
  *    uploadUrl: 'https://my-website.com/image/upload',
@@ -23,33 +20,29 @@ let Cropperjs = {
  * })
  */
 class CtrlAltElite {
-
   #defaultInitializationOptions = {
     uploadUrl: 'https://my-website.com/image/upload',
     replaceExistingElement: true,
-    allowedImageTypes: [ // long term goal
+    allowedImageTypes: [
+      // long term goal
       'jpg',
       'png',
-      'svg'
+      'svg',
     ],
     elementId: null,
     cropView: 'landscape',
-    allowedCropViews: [
-      'landscape',
-      'portrait',
-      'avatar',
-    ],
+    allowedCropViews: ['landscape', 'portrait', 'avatar'],
     onSuccess: () => {},
     cropperjs: {
       viewMode: 3,
       dragMode: 'crop',
-      initialAspectRatio: 16/9,
+      initialAspectRatio: 16 / 9,
       responsive: true,
       autoCropArea: 0.5,
       background: false,
       modal: false,
       ready: () => {
-        this.log('CropperJS is ready!')
+        this.log('CropperJS is ready!');
       },
     },
     sweetAlert: {
@@ -75,19 +68,19 @@ class CtrlAltElite {
       didOpen: () => {
         this.log('initializing cropperjs...');
         this.initializeCropperJS();
-      }
-    }
+      },
+    },
   };
 
   /**
    * the finalized package options object.
    */
-   #finalPluginOptions;
+  #finalPluginOptions;
 
-   /**
-    * CropperJS instance.
-    */
-   #cropperJS = null;
+  /**
+   * CropperJS instance.
+   */
+  #cropperJS = null;
 
   constructor(elementSelector, options = {}) {
     // TODO TAM: Check if the passed in elementSelector is a valid image type.
@@ -107,29 +100,25 @@ class CtrlAltElite {
   }
 
   /**
-    * A function that logs a color-coded message to the console if `debug` is `true`.
-    *
-    * @param {Object} args - A destructred array of all arguments passed into the `log` function which are then logged out in that same order.
-    *
-    */
-   log(...args) {
+   * A function that logs a color-coded message to the console if `debug` is `true`.
+   *
+   * @param {Object} args - A destructred array of all arguments passed into the `log` function which are then logged out in that same order.
+   *
+   */
+  log(...args) {
     /* eslint no-console: "off" */
     if (this.debug) console.log(`%c[${this.debugPrefix}]`, 'color: white; background: #2196F3', ...args);
   }
 
   /**
-   * 
-   * @param {*} elementSelector 
+   *
+   * @param {*} elementSelector
    */
   updateElement(elementSelector) {
-    if (
-      !_.isElement(elementSelector)
-      && (
-        !_.isString(elementSelector)
-        || !document.querySelector(elementSelector)
-      )
-    ) {
-      throw Error('The first argument for the CtrlAltElite class must be an HTML element or a valid HTML element selector string.');
+    if (!_.isElement(elementSelector) && (!_.isString(elementSelector) || !document.querySelector(elementSelector))) {
+      throw Error(
+        'The first argument for the CtrlAltElite class must be an HTML element or a valid HTML element selector string.'
+      );
     }
     if (_.isElement(elementSelector)) {
       this.originalElement = elementSelector;
@@ -139,16 +128,16 @@ class CtrlAltElite {
   }
 
   /**
-   * 
-   * @param {*} options 
+   *
+   * @param {*} options
    */
   updateOptions(options) {
     this.#finalPluginOptions = _.merge(this.#defaultInitializationOptions, options || {});
   }
 
   /**
-   * 
-   * @param {*} imageUrl 
+   *
+   * @param {*} imageUrl
    */
   handleImageLoad(imageUrl) {
     this.openCropModal({
@@ -156,11 +145,7 @@ class CtrlAltElite {
     });
   }
 
-  handleCropModalClose({
-    isConfirmed,
-    isDenied,
-    isDismissed,
-  } = {}) {
+  handleCropModalClose({ isConfirmed, isDenied, isDismissed } = {}) {
     this.imageInputElement.value = '';
     if (isConfirmed) {
       const croppedImgSrc = this.#cropperJS.getCroppedCanvas().toDataURL();
@@ -174,12 +159,10 @@ class CtrlAltElite {
   }
 
   /**
-   * 
-   * @param {*} param0 
+   *
+   * @param {*} param0
    */
-   async openCropModal({
-    imageUrl,
-  } = {}) {
+  async openCropModal({ imageUrl } = {}) {
     // need to add styling to make it look better and more official.
     const options = this.finalizeCropModalOptions({
       imageUrl,
@@ -188,15 +171,13 @@ class CtrlAltElite {
     this.handleCropModalClose(cropModalResult);
   }
 
-  finalizeCropModalOptions({
-    imageUrl,
-  } = {}) {
+  finalizeCropModalOptions({ imageUrl } = {}) {
     const { allowedCropViews } = this.#finalPluginOptions;
     const sweetAlertoptions = {
       ...this.#finalPluginOptions.sweetAlert,
       ...{
         imageUrl,
-      }
+      },
     };
     const { cropView } = this.#finalPluginOptions;
     if (!allowedCropViews.includes(cropView)) {
@@ -205,15 +186,15 @@ class CtrlAltElite {
         title: 'Oops...',
         text: 'You passed an invalid crop view!',
       });
-      throw Error('Invalid crop view! It can be either: \'landscape\' or \'avatar\'');
+      throw Error("Invalid crop view! It can be either: 'landscape' or 'avatar'");
     }
     return sweetAlertoptions;
   }
 
   /**
-   * 
-   * @param {*} src 
-   * @returns 
+   *
+   * @param {*} src
+   * @returns
    */
   loadImage(src) {
     return new Promise((resolve, reject) => {
@@ -225,8 +206,8 @@ class CtrlAltElite {
   }
 
   /**
-   * 
-   * @param {*} event 
+   *
+   * @param {*} event
    */
   async handleNewImageInputElementChange(event) {
     this.log('handleNewImageInputElementChange()', { event });
@@ -241,10 +222,10 @@ class CtrlAltElite {
   }
 
   /**
-   * 
-   * @param {*} event 
+   *
+   * @param {*} event
    */
-   async handleExistingImageInputElementChange(event) {
+  async handleExistingImageInputElementChange(event) {
     this.log('handleExistingImageInputElementChange()', { event });
     this.imageUrl = URL.createObjectURL(event.target.files[0]);
     this.log('this.imageUrl', this.imageUrl);
@@ -262,7 +243,7 @@ class CtrlAltElite {
   }
 
   /**
-   * 
+   *
    */
   handleImageOnload() {
     this.imageWidth = this.width;
@@ -270,8 +251,8 @@ class CtrlAltElite {
   }
 
   /**
-   * 
-   * @returns 
+   *
+   * @returns
    */
   hasImageBeenAdded() {
     return !!this.imageUrl;
@@ -288,7 +269,7 @@ class CtrlAltElite {
       e.preventDefault();
       this.imageInputElement.click();
     });
-    
+
     this.ctrlAltEliteElement.classList.add('ctrl-alt-elite', 'ctrl-alt-elite-existing');
     this.ctrlAltEliteElement.style.height = `${rect.height}px`;
     this.ctrlAltEliteElement.style.width = `${rect.width}px`;
@@ -314,7 +295,7 @@ class CtrlAltElite {
   }
 
   /**
-   * 
+   *
    */
   initializeElements() {
     this.ctrlAltEliteElement = document.createElement('div');
@@ -330,7 +311,8 @@ class CtrlAltElite {
 
     this.ctrlAltEliteElement.classList.add('ctrl-alt-elite', 'ctrl-alt-elite-new');
     if (this.#finalPluginOptions.cropView === 'avatar') this.ctrlAltEliteElement.classList.add('ctrl-alt-elite-avatar');
-    else if (this.#finalPluginOptions.cropView === 'portrait') this.ctrlAltEliteElement.classList.add('ctrl-alt-elite-portrait');
+    else if (this.#finalPluginOptions.cropView === 'portrait')
+      this.ctrlAltEliteElement.classList.add('ctrl-alt-elite-portrait');
 
     this.imageUploadLabelElement.classList.add('image-upload-label', 'no-image');
     this.imageUploadLabelElement.htmlFor = this.#finalPluginOptions.elementId;
@@ -603,7 +585,9 @@ class CtrlAltElite {
   }
 
   handleAddingAvatarCropViewStyling() {
+    this.log(this.#finalPluginOptions);
     if (this.#finalPluginOptions.cropView === 'avatar') {
+      console.log('adding hte css');
       return `
         .cropper-view-box,
         .cropper-face {
@@ -617,14 +601,23 @@ class CtrlAltElite {
         }
       `;
     }
-    return false;
-  }
+    return `
+    .cropper-view-box,
+        .cropper-face {
+          border-radius: unset;
+        }
 
+        /* The css styles for outline do not followborder-radius on iOS/Safari (#979). */
+        .cropper-view-box {
+            outline: unset;
+            box-shadow: unset;
+        }
+    `;
+  }
 }
 // ------------------------------------------
 // End of CtrlAltElite Class definition
 // ------------------------------------------
-
 
 function scriptLoaded() {
   Cropperjs.isScriptReady = true;

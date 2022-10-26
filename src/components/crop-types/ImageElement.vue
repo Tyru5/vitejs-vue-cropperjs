@@ -26,7 +26,39 @@ function initializeCropperJS() {
       },
     }
   };
+  const image2 = document.getElementById('target2');
+  const options2 = {
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+    cropView: 'landscape',
+    elementId: 'unique',
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+      },
+    }
+  };
+  const image3 = document.getElementById('target3');
+  const options3 = {
+    debug: true,
+    debugPrefix: 'CtrlAltElite',
+    cropView: 'portrait',
+    elementId: 'unique',
+    cropperjs: {
+      aspectRatio: 1,
+      autoCropArea: 0.5,
+      viewMode: 1,
+      ready: () => {
+        croppable.value = true;
+      },
+    }
+  };
   new CtrlAltElite(image, options);
+  new CtrlAltElite(image2, options2);
+  new CtrlAltElite(image3, options3);
 }
 
 onMounted(() => {
@@ -40,7 +72,18 @@ onMounted(() => {
 
   <!-- Wrap the image or canvas element with a block element (container) -->
   <div class="flex-center">
-    <img id="target" />
+    <div>
+      <p class="font-mono">avatar</p>
+      <img id="target" />
+    </div>
+    <div>
+      <p class="font-mono">landscape</p>
+      <img id="target2" />
+    </div>
+    <div>
+      <p class="font-mono">portrait</p>
+      <img id="target3" />
+    </div>
   </div>
 </template>
 
@@ -66,6 +109,7 @@ img:hover {
 
 .flex-center {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  align-items: center;
 }
 </style>

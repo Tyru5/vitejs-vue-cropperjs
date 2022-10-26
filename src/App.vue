@@ -96,7 +96,7 @@ onMounted(() => {
   <Designer v-else-if="store.state.activeNav === 'designer'"></Designer>
   <Playlist v-else-if="store.state.activeNav === 'playlist'"></Playlist>
   <UserProfile v-else-if="store.state.activeNav === 'userProfile'"></UserProfile>
-  <ImageElement v-else-if="store.state.activeNav === 'standalone'" msg="Vite + Vue + CropperJS" />
+  <ImageElement v-else-if="store.state.activeNav === 'standalone'" msg="Different Crop types supported:" />
 </template>
 
 <style scoped>
